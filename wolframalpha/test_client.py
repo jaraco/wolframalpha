@@ -5,4 +5,5 @@ app_id = 'Q59EW4-7K8AHE858R'
 
 def test_basic():
 	client = wolframalpha.Client(app_id)
-	client.query('30 deg C in deg F')
+	res = client.query('30 deg C in deg F')
+	import pytest; pytest.set_trace()
