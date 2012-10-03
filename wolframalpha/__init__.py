@@ -6,9 +6,19 @@ class Result(object):
     def __init__(self, stream):
         self.tree = etree.parse(stream)
 
+    def __iter__(self):
+        return (Pod(node) for node in self.tree.findall('pod'))
+
+    def __len__(self):
+        return len(self.tree)
+
     @property
     def pods(self):
-        return map(Pod, self.tree.findall('pod'))
+        return list(iter(self))
+
+    @property
+    def results(self):
+        return (pod for pod in self if pod.title=='Result')
 
 class Pod(object):
     def __init__(self, node):
@@ -16,7 +26,7 @@ class Pod(object):
         self.__dict__.update(node.attrib)
 
     def __iter__(self):
-        return (Content(node) for node in self.nodes.findall('subpod'))
+        return (Content(node) for node in self.node.findall('subpod'))
 
     @property
     def main(self):
