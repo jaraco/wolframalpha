@@ -23,5 +23,6 @@ class Client(object):
         ))
         url = 'http://api.wolframalpha.com/v2/query?' + query
         resp = urllib2.urlopen(url)
-        assert resp.headers['Content-Type'] == 'application/xml'
+        assert resp.headers.gettype() == 'text/xml'
+        assert resp.headers.getparam('charset') == 'utf-8'
         return Result(resp)
