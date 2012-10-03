@@ -4,6 +4,7 @@ import setuptools
 
 setup_params = dict(
 	name='wolframalpha',
+	description="Wolfram|Alpha 2.0 API client",
 	use_hg_version=True,
 	author="Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
