@@ -2,7 +2,24 @@ wolframalpha
 ============
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
-v2.0 API.
+v2.0 API. This project is hosted on `bitbucket
+<http://bitbucket.org/jaraco/wolframalpha>`_
+
+Installation
+============
+
+This library is released to PyPI, so the easiest way to install it is to use
+easy_install or pip::
+
+    easy_install wolframalpha
+
+or
+
+    pip install wolframalpha
+
+If you don't have these tools or you prefer not to use setuptools, you may
+also simply extract the 'wolframalpha' directory an appropriate location in
+your Python path.
 
 Usage
 =====
@@ -17,9 +34,13 @@ Then, you can send queries, which return Result objects::
 
     res = client.query('temperature in Washington, DC on October 3, 2012')
 
-Result objects have `pods` attribute (a Pod is an answer from Wolfram Alpha).
-You may also query for simple the pods which have 'Result' titles::
+Result objects have `pods` attribute (a Pod is an answer from Wolfram Alpha)::
 
-    print(res.results[0].text)
+    for pod in res.pods:
+        do_something_with(pod)
+
+You may also query for simply the pods which have 'Result' titles::
+
+    print(next(res.results).text)
 
 For more information, read the source.
