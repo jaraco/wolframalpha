@@ -3,17 +3,17 @@ wolframalpha
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
 v2.0 API. This project is hosted on `bitbucket
-<http://bitbucket.org/jaraco/wolframalpha>`_
+<http://bitbucket.org/jaraco/wolframalpha>`_.
 
 Installation
 ============
 
 This library is released to PyPI, so the easiest way to install it is to use
-easy_install or pip::
+easy_install::
 
     easy_install wolframalpha
 
-or
+or pip::
 
     pip install wolframalpha
 
