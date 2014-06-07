@@ -14,6 +14,8 @@ compat.fix_HTTPMessage()
 class Result(object):
     def __init__(self, stream):
         self.tree = etree.parse(stream)
+        if self.tree.getroot().find('error') is not None:
+            raise Exception('you may have entered the wrong appid')
 
     def __iter__(self):
         return (Pod(node) for node in self.tree.findall('pod'))
