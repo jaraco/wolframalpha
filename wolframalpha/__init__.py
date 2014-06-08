@@ -1,11 +1,5 @@
-try:
-    import urllib.parse as urllib_parse
-    import urllib.request as urllib_request
-except ImportError:
-    import urllib as urllib_parse
-    import urllib2 as urllib_request
-
 from xml.etree import ElementTree as etree
+from six.moves import urllib
 
 from . import compat
 
@@ -74,12 +68,12 @@ class Client(object):
         """
         Query Wolfram|Alpha with query using the v2.0 API
         """
-        query = urllib_parse.urlencode(dict(
+        query = urllib.parse.urlencode(dict(
             input=query,
             appid=self.app_id,
         ))
         url = 'http://api.wolframalpha.com/v2/query?' + query
-        resp = urllib_request.urlopen(url)
+        resp = urllib.request.urlopen(url)
         assert resp.headers.get_content_type() == 'text/xml'
         assert resp.headers.get_param('charset') == 'utf-8'
         return Result(resp)
