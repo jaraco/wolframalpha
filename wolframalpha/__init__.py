@@ -16,7 +16,10 @@ class Result(object):
         self.tree = etree.parse(stream)
         error = self.tree.find('error')
         if error:
-            raise Exception('you may have entered the wrong appid')
+            code = error.find('code').text
+            msg = error.find('msg').text
+            tmpl = 'Error {code}: {msg}'
+            raise Exception(tmpl.format(code=code, msg=msg))
 
     def __iter__(self):
         return (Pod(node) for node in self.tree.findall('pod'))
