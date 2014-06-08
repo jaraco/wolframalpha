@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import pytest
+
 import wolframalpha
 
 app_id = 'Q59EW4-7K8AHE858R'
@@ -13,3 +15,8 @@ def test_basic():
 	assert len(res.pods) > 0
 	results = list(res.results)
 	assert results[0].text == '86 °F  (degrees Fahrenheit)'
+
+def test_invalid_app_id():
+	client = wolframalpha.Client('abcdefg')
+	with pytest.raises(Exception):
+		client.query('30 deg C in deg F')
