@@ -14,6 +14,9 @@ compat.fix_HTTPMessage()
 class Result(object):
     def __init__(self, stream):
         self.tree = etree.parse(stream)
+        self._handle_error()
+
+    def _handle_error(self):
         error = self.tree.find('error')
         if error:
             code = error.find('code').text
