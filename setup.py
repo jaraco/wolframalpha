@@ -15,6 +15,9 @@ setup_params = dict(
 	url="https://bitbucket.org/jaraco/wolframalpha",
 	packages=setuptools.find_packages(),
 	zip_safe=False,
+	install_requires=[
+		'six',
+	],
 	setup_requires=[
 		'hgtools',
 		'pytest-runner',

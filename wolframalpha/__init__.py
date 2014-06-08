@@ -7,6 +7,10 @@ except ImportError:
 
 from xml.etree import ElementTree as etree
 
+from . import compat
+
+compat.fix_HTTPMessage()
+
 class Result(object):
     def __init__(self, stream):
         self.tree = etree.parse(stream)
