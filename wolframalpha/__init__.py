@@ -18,11 +18,13 @@ class Result(object):
 
     def _handle_error(self):
         error = self.tree.find('error')
-        if error:
-            code = error.find('code').text
-            msg = error.find('msg').text
-            tmpl = 'Error {code}: {msg}'
-            raise Exception(tmpl.format(code=code, msg=msg))
+        if not error:
+            return
+
+        code = error.find('code').text
+        msg = error.find('msg').text
+        tmpl = 'Error {code}: {msg}'
+        raise Exception(tmpl.format(code=code, msg=msg))
 
     def __iter__(self):
         return (Pod(node) for node in self.tree.findall('pod'))
