@@ -3,7 +3,7 @@ wolframalpha
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
 v2.0 API. This project is hosted on `bitbucket
-<http://bitbucket.org/jaraco/wolframalpha>`_.
+<https://github.com/jaraco/wolframalpha>`_.
 
 Installation
 ============
