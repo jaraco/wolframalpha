@@ -6,4 +6,5 @@ python:
   - 3.5
   - pypy
 script:
+ - pip install -U pytest
  - python setup.py test
