@@ -7,6 +7,10 @@ removed and will be de-activated. Users must register for their
 own key at the `Wolfram|Alpha developer web site
 <https://developer.wolframalpha.com>`_.
 
+Additionally, the tests now no longer bundle a hard-coded API
+key. Instead, to run the tests, one must supply a
+``WOLFRAMALPHA_API_KEY`` environment variable.
+
 1.4
 ===
 
