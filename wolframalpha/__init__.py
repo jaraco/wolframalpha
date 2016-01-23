@@ -51,11 +51,16 @@ class Pod(object):
     def text(self):
         return self.main.text
 
+    @property
+    def img(self):
+        return self.main.img
+
 class Content(object):
     def __init__(self, node):
         self.node = node
         self.__dict__.update(node.attrib)
         self.text = node.find('plaintext').text
+        self.img = node.find('img').attrib['src']
 
 class Client(object):
     """
