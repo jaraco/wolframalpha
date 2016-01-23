@@ -1,3 +1,8 @@
+2.2
+===
+
+Add support for images (img attribute on Atom).
+
 2.0
 ===
 
