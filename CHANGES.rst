@@ -1,3 +1,10 @@
+2.4
+===
+
+Automated release process with Travis-CI.
+
+Issue #5: Use HTTPS by default.
+
 2.3
 ===
 
