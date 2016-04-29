@@ -77,7 +77,7 @@ class Client(object):
             input=query,
             appid=self.app_id,
         ))
-        url = 'http://api.wolframalpha.com/v2/query?' + query
+        url = 'https://api.wolframalpha.com/v2/query?' + query
         resp = urllib.request.urlopen(url)
         assert resp.headers.get_content_type() == 'text/xml'
         assert resp.headers.get_param('charset') == 'utf-8'
