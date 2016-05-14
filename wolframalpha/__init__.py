@@ -79,7 +79,7 @@ class Result(object):
     
     @property
     def results(self):
-        ''' Get the response to a simple, discrete query. '''
+        ''' Get the pods that hold the response to a simple, discrete query. '''
         return [pod for pod in self.pods if pod.primary or pod.title=='Result']
     
     @property
@@ -123,7 +123,7 @@ class Pod(object):
         return self.number_of_subpods
 
     @property
-    def details(self):
+    def text(self):
         ''' Simply get the text from each subpod in this pod and return it in a list. '''
         return [subpod.text for subpod in self.subpods]
 
