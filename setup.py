@@ -33,6 +33,7 @@ setup_params = dict(
 	namespace_packages=name.split('.')[:-1],
 	install_requires=[
 		'six',
+		'xmltodict',
 	],
 	extras_require={
 	},
