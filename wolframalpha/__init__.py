@@ -9,13 +9,18 @@ compat.fix_HTTPMessage()
 class Client(object):
     """
     Wolfram|Alpha v2.0 client
+    
+    Pass an ID to the object upon instantiation, then
+    query Wolfram Alpha using the query method.
     """
     def __init__(self, app_id='Q59EW4-7K8AHE858R'):
         self.app_id = app_id
 
     def query(self, query, assumption=None):
         """
-        Query Wolfram|Alpha with query using the v2.0 API
+        Query Wolfram|Alpha using the v2.0 API
+        Allows for assumptions to be included.
+        See: http://products.wolframalpha.com/api/documentation.html#6
         """
         data = {
                 'input': query,
@@ -32,6 +37,9 @@ class Client(object):
         return Result(resp)
 
 class Result(object):
+    '''
+    Handles processing the response for the programmer.
+    '''
     def __init__(self, stream):
         self.tree = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
         self._handle_error()
@@ -79,21 +87,24 @@ class Result(object):
     
     @property
     def results(self):
+        ''' Get the response to a simple, discrete query. '''
         return self._flatten([pod.details for pod in self.pods if pod.primary or pod.title=='Result'])
     
     @property
     def details(self):
+        ''' Get a simplified set of answers with some context. '''
         return {pod.title: pod.details for pod in self.pods}
 
 class Pod(object):
+    ''' Groups answers and information contextualizing those answers. '''
     def __init__(self, node):
         self.node = node
+        self.error = node['@error']
         self._handle_error()
         self.title = node['@title']
         self.scanner = node['@scanner']
         self.id = node['@id']
         self.position = float(node['@position'])
-        self.error = node['@error']
         self.number_of_subpods = int(node['@numsubpods'])
         self.subpods = node['subpod']
         # Allow subpods to be accessed in a consistent way,
@@ -104,11 +115,10 @@ class Pod(object):
         self.primary = '@primary' in node and node['@primary'] != 'false'
 
     def _handle_error(self):
-        error_state = self.node['@error']
-        if error_state == 'false':
+        if self.error == 'false':
             return
         
-        error = self.tree['error']
+        error = self.node['error']
         code = error['code']
         msg = error['msg']
         template = 'Error {code}: {msg}'
@@ -122,6 +132,7 @@ class Pod(object):
 
     @property
     def details(self):
+        ''' Simply get the text from each subpod in this pod and return it in a list. '''
         return [subpod.text for subpod in self.subpods]
 
 # Needs work. At the moment this should be considered a placeholder.
@@ -157,6 +168,7 @@ class Warning(object):
         return len(node)
 
 class Subpod(object):
+    ''' Holds a specific answer or additional information relevant to said answer. '''
     def __init__(self, node):
         self.node = node
         self.title = node['@title']
@@ -169,6 +181,7 @@ class Subpod(object):
         self.img = list(map(Image, self.img))
 
 class Image(object):
+    ''' Holds information about an image included with an answer. '''
     def __init__(self, node):
         self.node = node
         self.title = node['@title']
