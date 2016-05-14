@@ -1,3 +1,8 @@
+3.0
+===
+
+Changed to using dictionaries instead of parsing XML.
+
 2.4
 ===
 
