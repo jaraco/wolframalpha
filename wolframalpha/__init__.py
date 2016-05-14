@@ -71,14 +71,6 @@ class Result(object):
         template = 'Error {code}: {msg}'
         raise Exception(template.format(code=code, msg=msg))
     
-    def _flatten(self, lists):
-        '''
-        src: http://stackoverflow.com/a/952952/4241708
-        usr: intuited
-        '''
-        from itertools import chain
-        return list(chain.from_iterable(lists))
-    
     def __iter__(self):
         return iter(self.info)
     
@@ -88,7 +80,7 @@ class Result(object):
     @property
     def results(self):
         ''' Get the response to a simple, discrete query. '''
-        return self._flatten([pod.details for pod in self.pods if pod.primary or pod.title=='Result'])
+        return [pod for pod in self.pods if pod.primary or pod.title=='Result']
     
     @property
     def details(self):
