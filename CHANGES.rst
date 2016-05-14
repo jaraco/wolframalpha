@@ -1,4 +1,4 @@
-3.0
+2.5
 ===
 
 Changed to using dictionaries instead of parsing XML.
