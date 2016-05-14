@@ -49,4 +49,6 @@ You may also query for simply the pods which have 'Result' titles or are marked 
 
     print(res.results[0])
 
+The interface as it is now does not have code built for accessing every piece of information that the Wolfram Alpha API could return. As such, every class has a copy of the original structure that it is supposed to parse. This copy is placed in a variable called node for every class but the Result class, whose variable is named tree. If there is information from the Wolfram Alpha API that you need for your program that this interface does not provide an exact function for then you can still gain access to that information through the previously mentioned variables; you'll just have to handle the API directly until the functionality you seek is built. 
+
 For more information, read the source.
