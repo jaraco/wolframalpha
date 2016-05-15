@@ -127,6 +127,19 @@ class Pod(object):
         ''' Simply get the text from each subpod in this pod and return it in a list. '''
         return [subpod.text for subpod in self.subpods]
 
+class Subpod(object):
+    ''' Holds a specific answer or additional information relevant to said answer. '''
+    def __init__(self, node):
+        self.node = node
+        self.title = node['@title']
+        self.text = node['plaintext']
+        self.img = node['img']
+        # Allow images to be accessed in a consistent way,
+        # as a list, regardless of how many there are.
+        if type(self.img) != list:
+            self.img = [self.img]
+        self.img = list(map(Image, self.img))
+
 # Needs work. At the moment this should be considered a placeholder.
 class Assumption(object):
     def __init__(self, node):
@@ -158,19 +171,6 @@ class Warning(object):
     
     def __len__(self):
         return len(node)
-
-class Subpod(object):
-    ''' Holds a specific answer or additional information relevant to said answer. '''
-    def __init__(self, node):
-        self.node = node
-        self.title = node['@title']
-        self.text = node['plaintext']
-        self.img = node['img']
-        # Allow images to be accessed in a consistent way,
-        # as a list, regardless of how many there are.
-        if type(self.img) != list:
-            self.img = [self.img]
-        self.img = list(map(Image, self.img))
 
 class Image(object):
     ''' Holds information about an image included with an answer. '''
