@@ -85,7 +85,7 @@ class Result(object):
     @property
     def details(self):
         ''' Get a simplified set of answers with some context. '''
-        return {pod.title: pod.details for pod in self.pods}
+        return {pod.title: pod.text for pod in self.pods}
 
 class Pod(object):
     ''' Groups answers and information contextualizing those answers. '''
