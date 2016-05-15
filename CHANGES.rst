@@ -2,7 +2,6 @@
 ===
 
 Changed to using dictionaries instead of parsing XML.
-Align with Wolfram Alpha API v2.0
 
 2.4
 ===
