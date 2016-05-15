@@ -75,7 +75,7 @@ class Result(object):
         return iter(self.info)
     
     def __len__(self):
-        return len(self.tree)
+        return len(self.info)
     
     @property
     def results(self):
