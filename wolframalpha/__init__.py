@@ -1,6 +1,6 @@
 import itertools
 
-from six.moves import urllib
+from six.moves import urllib, map
 
 import xmltodict
 
