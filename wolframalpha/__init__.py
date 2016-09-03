@@ -100,14 +100,14 @@ class Result(ErrorHandler, object):
     @property
     def results(self):
         """
-        Get the pods that hold the response to a simple, discrete query.
+        The pods that hold the response to a simple, discrete query.
         """
-        return [pod for pod in self.pods if pod.primary or pod.title=='Result']
+        return (pod for pod in self.pods if pod.primary or pod.title=='Result')
 
     @property
     def details(self):
         """
-        Get a simplified set of answers with some context.
+        A simplified set of answer text by title.
         """
         return {pod.title: pod.text for pod in self.pods}
 
