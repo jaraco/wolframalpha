@@ -35,5 +35,9 @@ marked as 'primary' using ``Result.results``::
 
     print(next(res.results).text)
 
+All objects returned are dictionary subclasses, so to find out which attributes
+Wolfram|Alpha has supplied, simply invoke ``.keys()`` on the object.
+Attributes formed from XML attributes can be accessed with or without their
+"@" prefix (added by xmltodict).
 
 For more information, read the source.
