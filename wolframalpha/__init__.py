@@ -121,6 +121,34 @@ class Result(ErrorHandler, Document):
         return {pod.title: pod.text for pod in self.pods}
 
 
+class Assumption(Document):
+    @property
+    def text(self):
+        text = self.template.replace('${desc1}', self.description)
+        try:
+            text = text.replace('${word}', self.word)
+        except:
+            pass
+        return text[:text.index('. ') + 1]
+
+
+class Warning(Document):
+    pass
+
+
+class Image(Document):
+    """
+    Holds information about an image included with an answer.
+    """
+    def __init__(self, *args, **kwargs):
+        super(Image, self).__init__(*args, **kwargs)
+        self.title = self['@title']
+        self.alt = self['@alt']
+        self.height = self['@height']
+        self.width  = self['@width']
+        self.src = self['@src']
+
+
 class Subpod(Document):
     """
     Holds a specific answer or additional information relevant to said answer.
@@ -168,32 +196,4 @@ class Pod(ErrorHandler, Document):
     @property
     def text(self):
         return next(iter(self.subpods)).text
-
-
-class Assumption(Document):
-    @property
-    def text(self):
-        text = self.template.replace('${desc1}', self.description)
-        try:
-            text = text.replace('${word}', self.word)
-        except:
-            pass
-        return text[:text.index('. ') + 1]
-
-
-class Warning(Document):
-    pass
-
-
-class Image(Document):
-    """
-    Holds information about an image included with an answer.
-    """
-    def __init__(self, *args, **kwargs):
-        super(Image, self).__init__(*args, **kwargs)
-        self.title = self['@title']
-        self.alt = self['@alt']
-        self.height = self['@height']
-        self.width  = self['@width']
-        self.src = self['@src']
 
