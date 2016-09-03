@@ -71,6 +71,17 @@ class Document(dict):
     _attr_types = {}
     "Override the types from the document"
 
+    @classmethod
+    def from_doc(cls, doc):
+        """
+        Load instances from the xmltodict result. Always return
+        a list, even if the result is a singleton.
+        """
+        if type(doc) != list:
+            doc = [doc]
+        return list(map(cls, doc))
+
+
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
         attr_name = '@' + name
@@ -155,16 +166,6 @@ class Image(Document):
         width=int,
     )
 
-    @classmethod
-    def from_doc(cls, doc):
-        """
-        Load images from the xmltodictresult. Always return
-        a list, even if the result is a singleton.
-        """
-        if type(doc) != list:
-            doc = [doc]
-        return list(map(Image, doc))
-
 
 class Subpod(Document):
     """
@@ -173,16 +174,6 @@ class Subpod(Document):
     _attr_types = dict(
         img=Image.from_doc,
     )
-
-    @classmethod
-    def from_doc(cls, doc):
-        """
-        Load subpods from the xmltodict result. Always return
-        a list, even if the result is a singleton.
-        """
-        if type(doc) != list:
-            doc = [doc]
-        return list(map(cls, doc))
 
 
 def xml_bool(str_val):
