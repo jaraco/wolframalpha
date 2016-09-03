@@ -56,16 +56,16 @@ class Client(object):
 
 
 class ErrorHandler(object):
-    @staticmethod
-    def _handle_error(resp):
-        error = resp.get('error')
-        if not error:
+    def __init__(self, *args, **kwargs):
+        super(ErrorHandler, self).__init__(*args, **kwargs)
+        self._handle_error()
+
+    def _handle_error(self):
+        if not 'error' in self:
             return
 
-        code = error['code']
-        msg = error['msg']
-        template = 'Error {code}: {msg}'
-        raise Exception(template.format(code=code, msg=msg))
+        template = 'Error {error[code]}: {error[msg]}'
+        raise Exception(template.format(**self))
 
 
 class Document(dict):
@@ -141,9 +141,6 @@ class Pod(ErrorHandler, Document):
         numsubpods=int,
         subpod=Subpod.from_doc,
     )
-    def __init__(self, *args, **kwargs):
-        super(Pod, self).__init__(*args, **kwargs)
-        self._handle_error(self)
 
     @property
     def subpods(self):
@@ -176,7 +173,6 @@ class Result(ErrorHandler, Document):
     def __init__(self, stream):
         doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
         super(Result, self).__init__(doc)
-        self._handle_error(self)
 
     @property
     def info(self):
