@@ -71,7 +71,8 @@ def test_pod_attributes(temp_result):
 	pod = next(temp_result.pods)
 	assert isinstance(pod.position, float)
 	assert isinstance(pod.id, six.text_type)
-	assert isinstance(pod.subpod[0].img[0].height, int)
+	img = next(next(pod.subpod).img)
+	assert isinstance(img.height, int)
 
 
 def test_invalid_app_id():

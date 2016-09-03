@@ -3,7 +3,6 @@ import itertools
 from six.moves import urllib, map
 
 import xmltodict
-from jaraco.functools import compose
 
 from . import compat
 
@@ -122,7 +121,7 @@ class Subpod(Document):
     Holds a specific answer or additional information relevant to said answer.
     """
     _attr_types = dict(
-        img=compose(list, Image.from_doc),
+        img=Image.from_doc,
     )
 
 
@@ -141,7 +140,7 @@ class Pod(ErrorHandler, Document):
     _attr_types = dict(
         position=float,
         numsubpods=int,
-        subpod=compose(list, Subpod.from_doc),
+        subpod=Subpod.from_doc,
     )
     def __init__(self, *args, **kwargs):
         super(Pod, self).__init__(*args, **kwargs)
