@@ -5,6 +5,9 @@ python:
 - 3.4
 - 3.5
 - pypy
+matrix:
+  allow_failures:
+    - python: pypy
 script:
 - pip install -U pytest
 - python setup.py test
