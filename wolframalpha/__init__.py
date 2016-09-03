@@ -3,6 +3,7 @@ import itertools
 from six.moves import urllib, map
 
 import xmltodict
+from jaraco.itertools import always_iterable
 
 from . import compat
 
@@ -77,9 +78,7 @@ class Document(dict):
         Load instances from the xmltodict result. Always return
         an iterable, even if the result is a singleton.
         """
-        if type(doc) != list:
-            doc = [doc]
-        return map(cls, doc)
+        return map(cls, always_iterable(doc))
 
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
@@ -193,11 +192,11 @@ class Result(ErrorHandler, Document):
 
     @property
     def assumptions(self):
-        return Assumption.from_doc(self.get('assumptions', []))
+        return Assumption.from_doc(self.get('assumptions'))
 
     @property
     def warnings(self):
-        return Warning.from_doc(self.get('warnings', []))
+        return Warning.from_doc(self.get('warnings'))
 
     def __iter__(self):
         return self.info
