@@ -55,9 +55,9 @@ class Client(object):
 
 
 class Result(object):
-    '''
+    """
     Handles processing the response for the programmer.
-    '''
+    """
     def __init__(self, stream):
         self.tree = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
         self._handle_error()
@@ -97,16 +97,23 @@ class Result(object):
 
     @property
     def results(self):
-        ''' Get the pods that hold the response to a simple, discrete query. '''
+        """
+        Get the pods that hold the response to a simple, discrete query.
+        """
         return [pod for pod in self.pods if pod.primary or pod.title=='Result']
 
     @property
     def details(self):
-        ''' Get a simplified set of answers with some context. '''
+        """
+        Get a simplified set of answers with some context.
+        """
         return {pod.title: pod.text for pod in self.pods}
 
+
 class Pod(object):
-    ''' Groups answers and information contextualizing those answers. '''
+    """
+    Groups answers and information contextualizing those answers.
+    """
     def __init__(self, node):
         self.node = node
         self.error = node['@error']
@@ -142,11 +149,16 @@ class Pod(object):
 
     @property
     def text(self):
-        ''' Simply get the text from each subpod in this pod and return it in a list. '''
+        """
+        Simply get the text from each subpod in this pod and return it in a list.
+        """
         return [subpod.text for subpod in self.subpods]
 
+
 class Subpod(object):
-    ''' Holds a specific answer or additional information relevant to said answer. '''
+    """
+    Holds a specific answer or additional information relevant to said answer.
+    """
     def __init__(self, node):
         self.node = node
         self.title = node['@title']
@@ -157,6 +169,7 @@ class Subpod(object):
         if type(self.img) != list:
             self.img = [self.img]
         self.img = list(map(Image, self.img))
+
 
 # Needs work. At the moment this should be considered a placeholder.
 class Assumption(object):
@@ -179,6 +192,7 @@ class Assumption(object):
             pass
         return text[:text.index('. ') + 1]
 
+
 # Needs work. At the moment this should be considered a placeholder.
 class Warning(object):
     def __init__(self, node):
@@ -190,8 +204,11 @@ class Warning(object):
     def __len__(self):
         return len(node)
 
+
 class Image(object):
-    ''' Holds information about an image included with an answer. '''
+    """
+    Holds information about an image included with an answer.
+    """
     def __init__(self, node):
         self.node = node
         self.title = node['@title']
