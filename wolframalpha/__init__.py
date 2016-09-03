@@ -54,13 +54,27 @@ class Client(object):
         return Result(resp)
 
 
-class Result(object):
+class ErrorHandler(object):
+    @staticmethod
+    def _handle_error(resp):
+        error_state = resp['@error']
+        if error_state == 'false':
+            return
+
+        error = resp['error']
+        code = error['code']
+        msg = error['msg']
+        template = 'Error {code}: {msg}'
+        raise Exception(template.format(code=code, msg=msg))
+
+
+class Result(ErrorHandler, object):
     """
     Handles processing the response for the programmer.
     """
     def __init__(self, stream):
         self.tree = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        self._handle_error()
+        self._handle_error(self.tree)
         self.info = []
         try:
             self.pods = list(map(Pod, self.tree['pod']))
@@ -77,17 +91,6 @@ class Result(object):
             self.info.append(self.warnings)
         except KeyError:
             self.warnings = None
-
-    def _handle_error(self):
-        error_state = self.tree['@error']
-        if error_state == 'false':
-            return
-
-        error = self.tree['error']
-        code = error['code']
-        msg = error['msg']
-        template = 'Error {code}: {msg}'
-        raise Exception(template.format(code=code, msg=msg))
 
     def __iter__(self):
         return iter(self.info)
@@ -110,14 +113,14 @@ class Result(object):
         return {pod.title: pod.text for pod in self.pods}
 
 
-class Pod(object):
+class Pod(ErrorHandler, object):
     """
     Groups answers and information contextualizing those answers.
     """
     def __init__(self, node):
         self.node = node
         self.error = node['@error']
-        self._handle_error()
+        self._handle_error(self.node)
         self.title = node['@title']
         self.scanner = node['@scanner']
         self.id = node['@id']
@@ -130,16 +133,6 @@ class Pod(object):
             self.subpods = [self.subpods]
         self.subpods = list(map(Subpod, self.subpods))
         self.primary = '@primary' in node and node['@primary'] != 'false'
-
-    def _handle_error(self):
-        if self.error == 'false':
-            return
-
-        error = self.node['error']
-        code = error['code']
-        msg = error['msg']
-        template = 'Error {code}: {msg}'
-        raise Exception(template.format(code=code, msg=msg))
 
     def __iter__(self):
         return iter(self.subpods)
