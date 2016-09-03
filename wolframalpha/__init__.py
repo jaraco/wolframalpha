@@ -57,11 +57,10 @@ class Client(object):
 class ErrorHandler(object):
     @staticmethod
     def _handle_error(resp):
-        error_state = resp['@error']
-        if error_state == 'false':
+        error = resp.get('error')
+        if not error:
             return
 
-        error = resp['error']
         code = error['code']
         msg = error['msg']
         template = 'Error {code}: {msg}'
