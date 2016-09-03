@@ -23,11 +23,11 @@ Result objects have `pods` (a Pod is an answer group from Wolfram Alpha)::
     for pod in res.pods:
         do_something_with(pod)
 
-Pod objects have `subpods` (a Subpod is a specific response with the plaintext
+Pod objects have ``subpods`` (a Subpod is a specific response with the plaintext
 reply and some additional info)::
 
     for pod in res.pods:
-        for sub in pod.subpod:
+        for sub in pod.subpods:
             print(sub.text)
 
 You may also query for simply the pods which have 'Result' titles or are

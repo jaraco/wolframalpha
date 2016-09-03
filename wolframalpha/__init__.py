@@ -82,7 +82,6 @@ class Document(dict):
             doc = [doc]
         return map(cls, doc)
 
-
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
         attr_name = '@' + name
@@ -149,6 +148,10 @@ class Pod(ErrorHandler, Document):
         self._handle_error(self)
 
     @property
+    def subpods(self):
+        return self.subpod
+
+    @property
     def primary(self):
         return '@primary' in self and xml_bool(self['@primary'])
 
@@ -168,6 +171,10 @@ class Result(ErrorHandler, Document):
     """
     Handles processing the response for the programmer.
     """
+    _attr_types = dict(
+        pod=Pod.from_doc,
+    )
+
     def __init__(self, stream):
         super(Result, self).__init__()
         doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
@@ -183,15 +190,15 @@ class Result(ErrorHandler, Document):
 
     @property
     def pods(self):
-        return map(Pod, self.get('pod', []))
+        return self.pod
 
     @property
     def assumptions(self):
-        return map(Assumption, self.get('assumptions', []))
+        return Assumption.from_doc(self.get('assumptions', []))
 
     @property
     def warnings(self):
-        return map(Warning, self.get('warnings', []))
+        return Warning.from_doc(self.get('warnings', []))
 
     def __iter__(self):
         return self.info
