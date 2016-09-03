@@ -174,9 +174,8 @@ class Result(ErrorHandler, Document):
     )
 
     def __init__(self, stream):
-        super(Result, self).__init__()
         doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        self.update(doc)
+        super(Result, self).__init__(doc)
         self._handle_error(self)
 
     @property
