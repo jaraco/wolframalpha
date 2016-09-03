@@ -9,7 +9,7 @@ compat.fix_HTTPMessage()
 class Client(object):
     """
     Wolfram|Alpha v2.0 client
-    
+
     Pass an ID to the object upon instantiation, then
     query Wolfram Alpha using the query method.
     """
@@ -28,7 +28,7 @@ class Client(object):
         }
         if assumption:
             data.update({'assumption': assumption})
-        
+
         query = urllib.parse.urlencode(data)
         url = 'https://api.wolframalpha.com/v2/query?' + query
         resp = urllib.request.urlopen(url)
@@ -59,29 +59,29 @@ class Result(object):
             self.info.append(self.warnings)
         except KeyError:
             self.warnings = None
-    
+
     def _handle_error(self):
         error_state = self.tree['@error']
         if error_state == 'false':
             return
-        
+
         error = self.tree['error']
         code = error['code']
         msg = error['msg']
         template = 'Error {code}: {msg}'
         raise Exception(template.format(code=code, msg=msg))
-    
+
     def __iter__(self):
         return iter(self.info)
-    
+
     def __len__(self):
         return len(self.info)
-    
+
     @property
     def results(self):
         ''' Get the pods that hold the response to a simple, discrete query. '''
         return [pod for pod in self.pods if pod.primary or pod.title=='Result']
-    
+
     @property
     def details(self):
         ''' Get a simplified set of answers with some context. '''
@@ -109,16 +109,16 @@ class Pod(object):
     def _handle_error(self):
         if self.error == 'false':
             return
-        
+
         error = self.node['error']
         code = error['code']
         msg = error['msg']
         template = 'Error {code}: {msg}'
         raise Exception(template.format(code=code, msg=msg))
-    
+
     def __iter__(self):
         return iter(self.subpods)
-    
+
     def __len__(self):
         return self.number_of_subpods
 
@@ -145,13 +145,13 @@ class Assumption(object):
     def __init__(self, node):
         self.assumption = node
         #self.description = self.assumption[0]['desc'] # We only care about our given assumption.
-        
+
     def __iter__(self):
         return iter(self.assumption)
-    
+
     def __len__(self):
         return len(self.assumption)
-    
+
     @property
     def text(self):
         text = self.template.replace('${desc1}', self.description)
@@ -168,7 +168,7 @@ class Warning(object):
 
     def __iter__(self):
         return iter(node)
-    
+
     def __len__(self):
         return len(node)
 
@@ -181,4 +181,4 @@ class Image(object):
         self.height = node['@height']
         self.width  = node['@width']
         self.src = node['@src']
-    
+
