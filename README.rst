@@ -23,16 +23,17 @@ Result objects have `pods` (a Pod is an answer group from Wolfram Alpha)::
     for pod in res.pods:
         do_something_with(pod)
 
-Pod objects have `subpods` (a Subpod is a specific response with the plaintext reply and some additional info)::
+Pod objects have `subpods` (a Subpod is a specific response with the plaintext
+reply and some additional info)::
 
     for pod in res.pods:
-        for sub in pod:
+        for sub in pod.subpod:
             print(sub.text)
 
-You may also query for simply the pods which have 'Result' titles or are marked as 'primary'::
+You may also query for simply the pods which have 'Result' titles or are
+marked as 'primary' using ``Result.results``::
 
-    print(res.results[0].text[0])
+    print(next(res.results).text)
 
-The interface as it is now does not have code built for accessing every piece of information that the Wolfram Alpha API could return. As such, every class has a copy of the original structure that it is supposed to parse. This copy is placed in a variable called node for every class but the Result class, whose variable is named tree. If there is information from the Wolfram Alpha API that you need for your program that this interface does not provide an exact function for then you can still gain access to that information through the previously mentioned variables; you'll just have to handle the API directly until the functionality you seek is built.
 
 For more information, read the source.

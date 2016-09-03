@@ -9,6 +9,9 @@
   as URL parameters.
 * ``Result.pods`` now returns an iterator and not
   a list.
+* ``Pod`` objects are no longer iterable. To access
+  the subpods of a pod, simply use the ``Pod.subpod``
+  property.
 * ``Result.tree`` and ``Pod.node`` have been removed.
 * ``Result`` now additionally presents the new attributes:
     - assumptions: An iterable of Assumptions.
