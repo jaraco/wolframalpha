@@ -68,7 +68,17 @@ class ErrorHandler(object):
 
 
 class Document(dict):
-    pass
+    _attr_types = {}
+    "Override the types from the document"
+
+    def __getattr__(self, name):
+        type = self._attr_types.get(name, lambda x: x)
+        attr_name = '@' + name
+        try:
+            val = self[name] if name in self else self[attr_name]
+        except KeyError:
+            raise AttributeError(name)
+        return type(val)
 
 
 class Result(ErrorHandler, Document):
@@ -140,60 +150,74 @@ class Image(Document):
     """
     Holds information about an image included with an answer.
     """
-    def __init__(self, *args, **kwargs):
-        super(Image, self).__init__(*args, **kwargs)
-        self.title = self['@title']
-        self.alt = self['@alt']
-        self.height = self['@height']
-        self.width  = self['@width']
-        self.src = self['@src']
+    _attr_types = dict(
+        height=int,
+        width=int,
+    )
+
+    @classmethod
+    def from_doc(cls, doc):
+        """
+        Load images from the xmltodictresult. Always return
+        a list, even if the result is a singleton.
+        """
+        if type(doc) != list:
+            doc = [doc]
+        return list(map(Image, doc))
 
 
 class Subpod(Document):
     """
     Holds a specific answer or additional information relevant to said answer.
     """
-    def __init__(self, *args, **kwargs):
-        super(Subpod, self).__init__(*args, **kwargs)
-        self.title = self['@title']
-        self.text = self['plaintext']
-        self.img = self['img']
-        # Allow images to be accessed in a consistent way,
-        # as a list, regardless of how many there are.
-        if type(self.img) != list:
-            self.img = [self.img]
-        self.img = list(map(Image, self.img))
+    _attr_types = dict(
+        img=Image.from_doc,
+    )
+
+    @classmethod
+    def from_doc(cls, doc):
+        """
+        Load subpods from the xmltodict result. Always return
+        a list, even if the result is a singleton.
+        """
+        if type(doc) != list:
+            doc = [doc]
+        return list(map(cls, doc))
+
+
+def xml_bool(str_val):
+    return (
+        bool(int(str_val))
+        if str_val.isdigit() else
+        str_val.lower() != 'true'
+    )
 
 
 class Pod(ErrorHandler, Document):
     """
     Groups answers and information contextualizing those answers.
     """
+    _attr_types = dict(
+        position=float,
+        numsubpods=int,
+        subpod=Subpod.from_doc,
+    )
     def __init__(self, *args, **kwargs):
         super(Pod, self).__init__(*args, **kwargs)
-        self.error = self['@error']
         self._handle_error(self)
-        self.title = self['@title']
-        self.scanner = self['@scanner']
-        self.id = self['@id']
-        self.position = float(self['@position'])
-        self.number_of_subpods = int(self['@numsubpods'])
-        self.subpods = self['subpod']
-        # Allow subpods to be accessed in a consistent way,
-        # as a list, regardless of how many there are.
-        if type(self.subpods) != list:
-            self.subpods = [self.subpods]
-        self.subpods = list(map(Subpod, self.subpods))
-        self.primary = '@primary' in self and self['@primary'] != 'false'
+
+    @property
+    def primary(self):
+        return '@primary' in self and xml_bool(self['@primary'])
 
     @property
     def texts(self):
         """
         The text from each subpod in this pod as a list.
         """
-        return [subpod.text for subpod in self.subpods]
+        return [subpod.plaintext for subpod in self.subpod]
 
     @property
     def text(self):
-        return next(iter(self.subpods)).text
+        return next(iter(self.subpod)).plaintext
 

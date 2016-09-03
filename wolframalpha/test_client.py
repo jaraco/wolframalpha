@@ -65,9 +65,11 @@ def test_properties(temp_result):
 	assert len(info) == len(pods) + len(warnings) + len(assumptions)
 
 
-def test_pod_position_is_float(temp_result):
+def test_pod_attributes(temp_result):
 	pod = next(temp_result.pods)
 	assert isinstance(pod.position, float)
+	assert isinstance(pod.id, str)
+	assert isinstance(pod.subpod[0].img[0].height, int)
 
 
 def test_invalid_app_id():
