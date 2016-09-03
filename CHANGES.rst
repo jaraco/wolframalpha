@@ -10,6 +10,11 @@
 * ``Result.pods`` now returns an iterator and not
   a list.
 * ``Result.tree`` and ``Pod.node`` have been removed.
+* ``Result`` now additionally presents the new attributes:
+    - assumptions: An iterable of Assumptions.
+    - warnings: An iterable of Warnings.
+    - info: An iterable combining all Pods, Assumptions,
+      and Warnings.
 
 2.4
 ===
