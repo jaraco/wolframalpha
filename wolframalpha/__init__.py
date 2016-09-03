@@ -67,13 +67,19 @@ class ErrorHandler(object):
         raise Exception(template.format(code=code, msg=msg))
 
 
-class Result(ErrorHandler, object):
+class Document(dict):
+    pass
+
+
+class Result(ErrorHandler, Document):
     """
     Handles processing the response for the programmer.
     """
     def __init__(self, stream):
-        self._doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        self._handle_error(self._doc)
+        super(Result, self).__init__()
+        doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
+        self.update(doc)
+        self._handle_error(self)
 
     @property
     def info(self):
@@ -84,15 +90,15 @@ class Result(ErrorHandler, object):
 
     @property
     def pods(self):
-        return map(Pod, self._doc.get('pod', []))
+        return map(Pod, self.get('pod', []))
 
     @property
     def assumptions(self):
-        return map(Assumption, self._doc.get('assumptions', []))
+        return map(Assumption, self.get('assumptions', []))
 
     @property
     def warnings(self):
-        return map(Warning, self._doc.get('warnings', []))
+        return map(Warning, self.get('warnings', []))
 
     def __iter__(self):
         return self.info
@@ -115,32 +121,26 @@ class Result(ErrorHandler, object):
         return {pod.title: pod.text for pod in self.pods}
 
 
-class Pod(ErrorHandler, object):
+class Pod(ErrorHandler, Document):
     """
     Groups answers and information contextualizing those answers.
     """
-    def __init__(self, doc):
-        self._doc = doc
-        self.error = doc['@error']
-        self._handle_error(doc)
-        self.title = doc['@title']
-        self.scanner = doc['@scanner']
-        self.id = doc['@id']
-        self.position = float(doc['@position'])
-        self.number_of_subpods = int(doc['@numsubpods'])
-        self.subpods = doc['subpod']
+    def __init__(self, *args, **kwargs):
+        super(Pod, self).__init__(*args, **kwargs)
+        self.error = self['@error']
+        self._handle_error(self)
+        self.title = self['@title']
+        self.scanner = self['@scanner']
+        self.id = self['@id']
+        self.position = float(self['@position'])
+        self.number_of_subpods = int(self['@numsubpods'])
+        self.subpods = self['subpod']
         # Allow subpods to be accessed in a consistent way,
         # as a list, regardless of how many there are.
         if type(self.subpods) != list:
             self.subpods = [self.subpods]
         self.subpods = list(map(Subpod, self.subpods))
-        self.primary = '@primary' in doc and doc['@primary'] != 'false'
-
-    def __iter__(self):
-        return iter(self.subpods)
-
-    def __len__(self):
-        return self.number_of_subpods
+        self.primary = '@primary' in self and self['@primary'] != 'false'
 
     @property
     def texts(self):
@@ -151,18 +151,18 @@ class Pod(ErrorHandler, object):
 
     @property
     def text(self):
-        return next(iter(self)).text
+        return next(iter(self.subpods)).text
 
 
-class Subpod(object):
+class Subpod(Document):
     """
     Holds a specific answer or additional information relevant to said answer.
     """
-    def __init__(self, doc):
-        self._doc = doc
-        self.title = doc['@title']
-        self.text = doc['plaintext']
-        self.img = doc['img']
+    def __init__(self, *args, **kwargs):
+        super(Subpod, self).__init__(*args, **kwargs)
+        self.title = self['@title']
+        self.text = self['plaintext']
+        self.img = self['img']
         # Allow images to be accessed in a consistent way,
         # as a list, regardless of how many there are.
         if type(self.img) != list:
@@ -170,18 +170,7 @@ class Subpod(object):
         self.img = list(map(Image, self.img))
 
 
-# Needs work. At the moment this should be considered a placeholder.
-class Assumption(object):
-    def __init__(self, doc):
-        self._doc = doc
-        #self.description = self._doc[0]['desc'] # We only care about our given assumption.
-
-    def __iter__(self):
-        return iter(self._doc)
-
-    def __len__(self):
-        return len(self._doc)
-
+class Assumption(Document):
     @property
     def text(self):
         text = self.template.replace('${desc1}', self.description)
@@ -192,27 +181,19 @@ class Assumption(object):
         return text[:text.index('. ') + 1]
 
 
-# Needs work. At the moment this should be considered a placeholder.
-class Warning(object):
-    def __init__(self, doc):
-        self._doc = doc
-
-    def __iter__(self):
-        return iter(self._doc)
-
-    def __len__(self):
-        return len(self._doc)
+class Warning(Document):
+    pass
 
 
-class Image(object):
+class Image(Document):
     """
     Holds information about an image included with an answer.
     """
-    def __init__(self, node):
-        self.node = node
-        self.title = node['@title']
-        self.alt = node['@alt']
-        self.height = node['@height']
-        self.width  = node['@width']
-        self.src = node['@src']
+    def __init__(self, *args, **kwargs):
+        super(Image, self).__init__(*args, **kwargs)
+        self.title = self['@title']
+        self.alt = self['@alt']
+        self.height = self['@height']
+        self.width  = self['@width']
+        self.src = self['@src']
 
