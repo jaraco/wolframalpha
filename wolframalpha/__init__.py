@@ -121,6 +121,22 @@ class Result(ErrorHandler, Document):
         return {pod.title: pod.text for pod in self.pods}
 
 
+class Subpod(Document):
+    """
+    Holds a specific answer or additional information relevant to said answer.
+    """
+    def __init__(self, *args, **kwargs):
+        super(Subpod, self).__init__(*args, **kwargs)
+        self.title = self['@title']
+        self.text = self['plaintext']
+        self.img = self['img']
+        # Allow images to be accessed in a consistent way,
+        # as a list, regardless of how many there are.
+        if type(self.img) != list:
+            self.img = [self.img]
+        self.img = list(map(Image, self.img))
+
+
 class Pod(ErrorHandler, Document):
     """
     Groups answers and information contextualizing those answers.
@@ -152,22 +168,6 @@ class Pod(ErrorHandler, Document):
     @property
     def text(self):
         return next(iter(self.subpods)).text
-
-
-class Subpod(Document):
-    """
-    Holds a specific answer or additional information relevant to said answer.
-    """
-    def __init__(self, *args, **kwargs):
-        super(Subpod, self).__init__(*args, **kwargs)
-        self.title = self['@title']
-        self.text = self['plaintext']
-        self.img = self['img']
-        # Allow images to be accessed in a consistent way,
-        # as a list, regardless of how many there are.
-        if type(self.img) != list:
-            self.img = [self.img]
-        self.img = list(map(Image, self.img))
 
 
 class Assumption(Document):
