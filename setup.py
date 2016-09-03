@@ -34,6 +34,7 @@ setup_params = dict(
 	install_requires=[
 		'six',
 		'xmltodict',
+		'jaraco.functools',
 	],
 	extras_require={
 	},

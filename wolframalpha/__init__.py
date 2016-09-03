@@ -3,6 +3,7 @@ import itertools
 from six.moves import urllib, map
 
 import xmltodict
+from jaraco.functools import compose
 
 from . import compat
 
@@ -75,11 +76,11 @@ class Document(dict):
     def from_doc(cls, doc):
         """
         Load instances from the xmltodict result. Always return
-        a list, even if the result is a singleton.
+        an iterable, even if the result is a singleton.
         """
         if type(doc) != list:
             doc = [doc]
-        return list(map(cls, doc))
+        return map(cls, doc)
 
 
     def __getattr__(self, name):
@@ -172,7 +173,7 @@ class Subpod(Document):
     Holds a specific answer or additional information relevant to said answer.
     """
     _attr_types = dict(
-        img=Image.from_doc,
+        img=compose(list, Image.from_doc),
     )
 
 
@@ -191,7 +192,7 @@ class Pod(ErrorHandler, Document):
     _attr_types = dict(
         position=float,
         numsubpods=int,
-        subpod=Subpod.from_doc,
+        subpod=compose(list, Subpod.from_doc),
     )
     def __init__(self, *args, **kwargs):
         super(Pod, self).__init__(*args, **kwargs)
