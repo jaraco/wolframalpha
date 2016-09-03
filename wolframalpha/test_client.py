@@ -65,6 +65,11 @@ def test_properties(temp_result):
 	assert len(info) == len(pods) + len(warnings) + len(assumptions)
 
 
+def test_pod_position_is_float(temp_result):
+	pod = next(temp_result.pods)
+	assert isinstance(pod.position, float)
+
+
 def test_invalid_app_id():
 	client = wolframalpha.Client('abcdefg')
 	with pytest.raises(Exception):
