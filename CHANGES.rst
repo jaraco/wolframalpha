@@ -7,6 +7,8 @@
 * ``Client.query`` now accepts keyword arguments
   and parameters passed directly to Wolfram|Alpha
   as URL parameters.
+* ``Result.pods`` now returns an iterator and not
+  a list.
 
 2.4
 ===

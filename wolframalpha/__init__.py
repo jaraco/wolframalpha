@@ -74,28 +74,31 @@ class Result(ErrorHandler, object):
     def __init__(self, stream):
         self.tree = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
         self._handle_error(self.tree)
-        self.info = []
-        try:
-            self.pods = list(map(Pod, self.tree['pod']))
-            self.info.append(self.pods)
-        except KeyError:
-            self.pods = None
-        try:
-            self.assumptions = list(map(Assumption, self.tree['assumptions']))
-            self.info.append(self.assumptions)
-        except KeyError:
-            self.assumptions = None
-        try:
-            self.warnings = list(map(Warning, self.tree['warnings']))
-            self.info.append(self.warnings)
-        except KeyError:
-            self.warnings = None
+
+    @property
+    def info(self):
+        """
+        The pods, assumptions, and warnings of this result.
+        """
+        return itertools.chain(self.pods, self.assumptions, self.warnings)
+
+    @property
+    def pods(self):
+        return map(Pod, self.tree.get('pod', []))
+
+    @property
+    def assumptions(self):
+        return map(Assumption, self.tree.get('assumptions', []))
+
+    @property
+    def warnings(self):
+        return map(Warning, self.tree.get('warnings', []))
 
     def __iter__(self):
-        return iter(self.info)
+        return self.info
 
     def __len__(self):
-        return len(self.info)
+        return sum(1 for _ in self.info)
 
     @property
     def results(self):
