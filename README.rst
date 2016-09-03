@@ -1,5 +1,12 @@
-wolframalpha
-============
+.. image:: https://img.shields.io/pypi/v/wolframalpha.svg
+   :target: https://pypi.org/project/wolframalpha
+
+.. image:: https://img.shields.io/pypi/pyversions/wolframalpha.svg
+
+.. image:: https://img.shields.io/pypi/dm/wolframalpha.svg
+
+.. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
+   :target: http://travis-ci.org/jaraco/wolframalpha
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
 v2.0 API. This project is hosted on `Github

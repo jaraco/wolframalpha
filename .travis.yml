@@ -11,13 +11,17 @@ matrix:
 script:
 - pip install -U pytest
 - python setup.py test
+branches:
+  except:
+  - skeleton
 deploy:
   provider: pypi
+  server: https://upload.pypi.org/legacy/
   on:
     tags: true
     all_branches: true
     python: 3.5
   user: jaraco
-  distributions: release
+  distributions: dists
   password:
     secure: 2JIGwS5V4TRi8+T1PzH9hardS+woul2s0y0a7l0KyLxta8ThUihZjLqqDvniX3aOPKoYRx+wrg73Qs+t1ISkjGENsmuIqkdtG++EvfN6Goopv7qePZlm41plsGZBS/EDT6woLNy1Mk6uRAmp7UrVqgXPkyPTJPOh+C8SdZ/AvbqlXOpTNfOJaUGJb3GbCQy1nX8SbFAteVRVe1sWGuNS0MRyDb6DOOwhRmGUHwVMNyvLoNZ3QGsTViju7CJUmie+XjKgKiPDbF+OCBHR+VAbY6vZiWC2I0rV6CmKoXfgaaF0BGZLq4iOw7LUNTIVInRSuyQd+bkoUNP2/aU84mFD9bAHcp5uGJ7xy4ahh8ieTkvKk0kudrmu+mtUPZ/fW6Zu51sDjrfdsNLlUZ7tHc1CsIJnjYYU/SasuQ1BT6s4NpsQ7/gNFAdO6JOfSLmTM3arOJIAeDPYEBW8yCEVaxK4EnYl0vE6kuFRq2ey8eyqkwr8Kahn13qUwaOiSmecIWgI/pZ1ettfoVdEh/aL4qONOFD6trfpeqjKFUugLyNmh+PvAfNTjxL+pe309Y8Uw2yaouDLZNI1jUDlNrV9025LJMwNGXs3ViVTTdmTfJza0+SVOfJ77ttLvQxdDvQd9jfYFmDpeeKtReJrFiTt00xSksJd4kbi6iarzRblUplemmA=
