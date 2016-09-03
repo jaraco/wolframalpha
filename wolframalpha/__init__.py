@@ -16,18 +16,22 @@ class Client(object):
     def __init__(self, app_id='Q59EW4-7K8AHE858R'):
         self.app_id = app_id
 
-    def query(self, query, assumption=None):
+    def query(self, query, **data):
         """
         Query Wolfram|Alpha using the v2.0 API
-        Allows for assumptions to be included.
-        See: http://products.wolframalpha.com/api/documentation.html#6
+
+        Allows for arbitrary parameters (data) to be passed in
+        the query. For example, to pass assumptions:
+
+            client.query(query='pi', assumption='*C.pi-_*NamedConstant-')
+
+        For more details on Assumptions, see
+        https://products.wolframalpha.com/api/documentation.html#6
         """
-        data = {
-                'input': query,
-                'appid': self.app_id
-        }
-        if assumption:
-            data.update({'assumption': assumption})
+        data.update(
+            input=query,
+            appid=self.app_id,
+        )
 
         query = urllib.parse.urlencode(data)
         url = 'https://api.wolframalpha.com/v2/query?' + query
@@ -35,6 +39,7 @@ class Client(object):
         assert resp.headers.get_content_type() == 'text/xml'
         assert resp.headers.get_param('charset') == 'utf-8'
         return Result(resp)
+
 
 class Result(object):
     '''
