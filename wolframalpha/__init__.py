@@ -16,7 +16,7 @@ class Client(object):
     Pass an ID to the object upon instantiation, then
     query Wolfram Alpha using the query method.
     """
-    def __init__(self, app_id='Q59EW4-7K8AHE858R'):
+    def __init__(self, app_id):
         self.app_id = app_id
 
     def query(self, input, params=(), **kwargs):
