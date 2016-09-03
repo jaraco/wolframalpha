@@ -93,56 +93,6 @@ class Document(dict):
         return type(val)
 
 
-class Result(ErrorHandler, Document):
-    """
-    Handles processing the response for the programmer.
-    """
-    def __init__(self, stream):
-        super(Result, self).__init__()
-        doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        self.update(doc)
-        self._handle_error(self)
-
-    @property
-    def info(self):
-        """
-        The pods, assumptions, and warnings of this result.
-        """
-        return itertools.chain(self.pods, self.assumptions, self.warnings)
-
-    @property
-    def pods(self):
-        return map(Pod, self.get('pod', []))
-
-    @property
-    def assumptions(self):
-        return map(Assumption, self.get('assumptions', []))
-
-    @property
-    def warnings(self):
-        return map(Warning, self.get('warnings', []))
-
-    def __iter__(self):
-        return self.info
-
-    def __len__(self):
-        return sum(1 for _ in self.info)
-
-    @property
-    def results(self):
-        """
-        The pods that hold the response to a simple, discrete query.
-        """
-        return (pod for pod in self.pods if pod.primary or pod.title=='Result')
-
-    @property
-    def details(self):
-        """
-        A simplified set of answer text by title.
-        """
-        return {pod.title: pod.text for pod in self.pods}
-
-
 class Assumption(Document):
     @property
     def text(self):
@@ -213,3 +163,52 @@ class Pod(ErrorHandler, Document):
     def text(self):
         return next(iter(self.subpod)).plaintext
 
+
+class Result(ErrorHandler, Document):
+    """
+    Handles processing the response for the programmer.
+    """
+    def __init__(self, stream):
+        super(Result, self).__init__()
+        doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
+        self.update(doc)
+        self._handle_error(self)
+
+    @property
+    def info(self):
+        """
+        The pods, assumptions, and warnings of this result.
+        """
+        return itertools.chain(self.pods, self.assumptions, self.warnings)
+
+    @property
+    def pods(self):
+        return map(Pod, self.get('pod', []))
+
+    @property
+    def assumptions(self):
+        return map(Assumption, self.get('assumptions', []))
+
+    @property
+    def warnings(self):
+        return map(Warning, self.get('warnings', []))
+
+    def __iter__(self):
+        return self.info
+
+    def __len__(self):
+        return sum(1 for _ in self.info)
+
+    @property
+    def results(self):
+        """
+        The pods that hold the response to a simple, discrete query.
+        """
+        return (pod for pod in self.pods if pod.primary or pod.title=='Result')
+
+    @property
+    def details(self):
+        """
+        A simplified set of answer text by title.
+        """
+        return {pod.title: pod.text for pod in self.pods}
