@@ -1,7 +1,12 @@
 3.0
 ===
 
-Changed to using dictionaries instead of parsing XML.
+* Models now parse the results using xmltodict.
+* Changed parameter of ``Client.query`` from
+  ``query`` to ``input``.
+* ``Client.query`` now accepts keyword arguments
+  and parameters passed directly to Wolfram|Alpha
+  as URL parameters.
 
 2.4
 ===

@@ -1,4 +1,7 @@
+import itertools
+
 from six.moves import urllib
+
 import xmltodict
 
 from . import compat
@@ -16,22 +19,32 @@ class Client(object):
     def __init__(self, app_id='Q59EW4-7K8AHE858R'):
         self.app_id = app_id
 
-    def query(self, query, **data):
+    def query(self, input, params=(), **kwargs):
         """
         Query Wolfram|Alpha using the v2.0 API
 
-        Allows for arbitrary parameters (data) to be passed in
+        Allows for arbitrary parameters to be passed in
         the query. For example, to pass assumptions:
 
-            client.query(query='pi', assumption='*C.pi-_*NamedConstant-')
+            client.query(input='pi', assumption='*C.pi-_*NamedConstant-')
+
+        To pass multiple assumptions, pass multiple items
+        as params:
+
+            params = (
+                ('assumption', '*C.pi-_*NamedConstant-'),
+                ('assumption', 'DateOrder_**Day.Month.Year--'),
+            )
+            client.query(input='pi', params=params)
 
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        data.update(
-            input=query,
+        data = dict(
+            input=input,
             appid=self.app_id,
         )
+        data = itertools.chain(params, data.items(), kwargs.items())
 
         query = urllib.parse.urlencode(data)
         url = 'https://api.wolframalpha.com/v2/query?' + query
