@@ -46,7 +46,7 @@ class Client(object):
         )
         data = itertools.chain(params, data.items(), kwargs.items())
 
-        query = urllib.parse.urlencode(data)
+        query = urllib.parse.urlencode(tuple(data))
         url = 'https://api.wolframalpha.com/v2/query?' + query
         resp = urllib.request.urlopen(url)
         assert resp.headers.get_content_type() == 'text/xml'
