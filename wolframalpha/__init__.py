@@ -72,8 +72,8 @@ class Result(ErrorHandler, object):
     Handles processing the response for the programmer.
     """
     def __init__(self, stream):
-        self.tree = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        self._handle_error(self.tree)
+        self._doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
+        self._handle_error(self._doc)
 
     @property
     def info(self):
@@ -84,15 +84,15 @@ class Result(ErrorHandler, object):
 
     @property
     def pods(self):
-        return map(Pod, self.tree.get('pod', []))
+        return map(Pod, self._doc.get('pod', []))
 
     @property
     def assumptions(self):
-        return map(Assumption, self.tree.get('assumptions', []))
+        return map(Assumption, self._doc.get('assumptions', []))
 
     @property
     def warnings(self):
-        return map(Warning, self.tree.get('warnings', []))
+        return map(Warning, self._doc.get('warnings', []))
 
     def __iter__(self):
         return self.info
@@ -119,22 +119,22 @@ class Pod(ErrorHandler, object):
     """
     Groups answers and information contextualizing those answers.
     """
-    def __init__(self, node):
-        self.node = node
-        self.error = node['@error']
-        self._handle_error(self.node)
-        self.title = node['@title']
-        self.scanner = node['@scanner']
-        self.id = node['@id']
-        self.position = float(node['@position'])
-        self.number_of_subpods = int(node['@numsubpods'])
-        self.subpods = node['subpod']
+    def __init__(self, doc):
+        self._doc = doc
+        self.error = doc['@error']
+        self._handle_error(doc)
+        self.title = doc['@title']
+        self.scanner = doc['@scanner']
+        self.id = doc['@id']
+        self.position = float(doc['@position'])
+        self.number_of_subpods = int(doc['@numsubpods'])
+        self.subpods = doc['subpod']
         # Allow subpods to be accessed in a consistent way,
         # as a list, regardless of how many there are.
         if type(self.subpods) != list:
             self.subpods = [self.subpods]
         self.subpods = list(map(Subpod, self.subpods))
-        self.primary = '@primary' in node and node['@primary'] != 'false'
+        self.primary = '@primary' in doc and doc['@primary'] != 'false'
 
     def __iter__(self):
         return iter(self.subpods)
@@ -158,11 +158,11 @@ class Subpod(object):
     """
     Holds a specific answer or additional information relevant to said answer.
     """
-    def __init__(self, node):
-        self.node = node
-        self.title = node['@title']
-        self.text = node['plaintext']
-        self.img = node['img']
+    def __init__(self, doc):
+        self._doc = doc
+        self.title = doc['@title']
+        self.text = doc['plaintext']
+        self.img = doc['img']
         # Allow images to be accessed in a consistent way,
         # as a list, regardless of how many there are.
         if type(self.img) != list:
@@ -172,15 +172,15 @@ class Subpod(object):
 
 # Needs work. At the moment this should be considered a placeholder.
 class Assumption(object):
-    def __init__(self, node):
-        self.assumption = node
-        #self.description = self.assumption[0]['desc'] # We only care about our given assumption.
+    def __init__(self, doc):
+        self._doc = doc
+        #self.description = self._doc[0]['desc'] # We only care about our given assumption.
 
     def __iter__(self):
-        return iter(self.assumption)
+        return iter(self._doc)
 
     def __len__(self):
-        return len(self.assumption)
+        return len(self._doc)
 
     @property
     def text(self):
@@ -194,14 +194,14 @@ class Assumption(object):
 
 # Needs work. At the moment this should be considered a placeholder.
 class Warning(object):
-    def __init__(self, node):
-        self.node = node
+    def __init__(self, doc):
+        self._doc = doc
 
     def __iter__(self):
-        return iter(node)
+        return iter(self._doc)
 
     def __len__(self):
-        return len(node)
+        return len(self._doc)
 
 
 class Image(object):

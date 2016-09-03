@@ -9,6 +9,7 @@
   as URL parameters.
 * ``Result.pods`` now returns an iterator and not
   a list.
+* ``Result.tree`` and ``Pod.node`` have been removed.
 
 2.4
 ===
