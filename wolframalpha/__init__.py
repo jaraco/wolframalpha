@@ -140,11 +140,15 @@ class Pod(ErrorHandler, object):
         return self.number_of_subpods
 
     @property
-    def text(self):
+    def texts(self):
         """
-        Simply get the text from each subpod in this pod and return it in a list.
+        The text from each subpod in this pod as a list.
         """
         return [subpod.text for subpod in self.subpods]
+
+    @property
+    def text(self):
+        return next(iter(self)).text
 
 
 class Subpod(object):

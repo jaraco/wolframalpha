@@ -27,7 +27,7 @@ def test_basic(API_key):
 	res = client.query('30 deg C in deg F')
 	assert len(res.pods) > 0
 	results = list(res.results)
-	assert results[0].text == ['86 °F  (degrees Fahrenheit)']
+	assert results[0].text == '86 °F  (degrees Fahrenheit)'
 
 def test_invalid_app_id():
 	client = wolframalpha.Client('abcdefg')
