@@ -1,4 +1,5 @@
 import itertools
+import json
 
 from six.moves import urllib, map
 
@@ -125,11 +126,13 @@ class Subpod(Document):
 
 
 def xml_bool(str_val):
-    return (
-        bool(int(str_val))
-        if str_val.isdigit() else
-        str_val.lower() != 'true'
-    )
+    """
+    >>> xml_bool('true')
+    True
+    >>> xml_bool('false')
+    False
+    """
+    return bool(json.loads(str_val))
 
 
 class Pod(ErrorHandler, Document):
