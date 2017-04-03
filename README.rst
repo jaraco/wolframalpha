@@ -7,10 +7,13 @@
 
 .. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
    :target: http://travis-ci.org/jaraco/wolframalpha
-
+   
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
 v2.0 API. This project is hosted on `Github
 <https://github.com/jaraco/wolframalpha>`_.
+
+.. image:: https://img.shields.io/badge/API%20Test-RapidAPI-blue.svg
+   :target: https://rapidapi.com/package/WolframAlpha/functions?utm_source=WolframAlphaGithub&utm_medium=button&utm_content=Vender_Github
 
 Usage
 =====
