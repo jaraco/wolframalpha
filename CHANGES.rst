@@ -63,3 +63,18 @@ Add pmxbot module and plugin, superseding pmxbot-wolframalpha package.
 ===
 
 Moved hosting to Github.
+
+1.2
+===
+
+Rely on six for urllib compatibility.
+
+1.1
+===
+
+Added Python 3 compatibility.
+
+1.0
+===
+
+Initial release.
