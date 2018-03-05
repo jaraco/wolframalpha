@@ -3,24 +3,21 @@
 # Project skeleton maintained at https://github.com/jaraco/skeleton
 
 import io
-import sys
 
 import setuptools
 
 with io.open('README.rst', encoding='utf-8') as readme:
 	long_description = readme.read()
 
-needs_pytest = {'pytest', 'test'}.intersection(sys.argv)
-pytest_runner = ['pytest_runner'] if needs_pytest else []
-needs_sphinx = {'release', 'build_sphinx', 'upload_docs'}.intersection(sys.argv)
-sphinx = ['sphinx', 'rst.linker'] if needs_sphinx else []
-needs_wheel = {'release', 'bdist_wheel'}.intersection(sys.argv)
-wheel = ['wheel'] if needs_wheel else []
-
 name = 'wolframalpha'
 description = 'Wolfram|Alpha 2.0 API client'
+nspkg_technique = 'native'
+"""
+Does this package use "native" namespace packages or
+pkg_resources "managed" namespace packages?
+"""
 
-setup_params = dict(
+params = dict(
 	name=name,
 	use_scm_version=True,
 	author="Jason R. Coombs",
@@ -30,20 +27,38 @@ setup_params = dict(
 	url="https://github.com/jaraco/" + name,
 	packages=setuptools.find_packages(),
 	include_package_data=True,
-	namespace_packages=name.split('.')[:-1],
+	namespace_packages=(
+		name.split('.')[:-1] if nspkg_technique == 'managed'
+		else []
+	),
+	python_requires='>=2.7',
 	install_requires=[
 		'six',
 		'xmltodict',
 		'jaraco.itertools>=2.0',
 	],
 	extras_require={
+		'testing': [
+			# upstream
+			'pytest>=2.8',
+			'pytest-sugar>=0.9.1',
+			'collective.checkdocs',
+			'pytest-flake8',
+
+			# local
+			'pmxbot',
+		],
+		'docs': [
+			# upstream
+			'sphinx',
+			'jaraco.packaging>=3.2',
+			'rst.linker>=1.9',
+
+			# local
+		],
 	},
 	setup_requires=[
-		'setuptools_scm>=1.9',
-	] + pytest_runner + sphinx + wheel,
-	tests_require=[
-		'pytest>=2.8',
-		'pmxbot',
+		'setuptools_scm>=1.15.0',
 	],
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
@@ -54,9 +69,9 @@ setup_params = dict(
 	],
 	entry_points={
 		'pmxbot_handlers': [
-		    'Wolfram|Alpha = wolframalpha.pmxbot',
-        	],
+			'Wolfram|Alpha = wolframalpha.pmxbot',
+		],
 	},
 )
 if __name__ == '__main__':
-	setuptools.setup(**setup_params)
+	setuptools.setup(**params)

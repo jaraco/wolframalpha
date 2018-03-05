@@ -3,14 +3,14 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/wolframalpha.svg
 
-.. image:: https://img.shields.io/pypi/dm/wolframalpha.svg
-
 .. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
-   :target: http://travis-ci.org/jaraco/wolframalpha
+   :target: https://travis-ci.org/jaraco/wolframalpha
+
+.. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
+   :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
-v2.0 API. This project is hosted on `Github
-<https://github.com/jaraco/wolframalpha>`_.
+v2.0 API.
 
 Usage
 =====
