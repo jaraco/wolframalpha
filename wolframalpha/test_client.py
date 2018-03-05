@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
 
@@ -12,6 +12,7 @@ import wolframalpha
 @pytest.fixture(scope='module')
 def temp_result(client):
 	return client.query('30 deg C in deg F')
+
 
 def test_basic(temp_result):
 	res = temp_result

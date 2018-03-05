@@ -8,10 +8,10 @@ import wolframalpha
 
 
 if six.PY2:
-    collect_ignore = [
-    	'wolframalpha/pmxbot.py',
-    	'wolframalpha/test_pmxbot.py',
-    ]
+	collect_ignore = [
+		'wolframalpha/pmxbot.py',
+		'wolframalpha/test_pmxbot.py',
+	]
 
 
 @pytest.fixture(scope='session')

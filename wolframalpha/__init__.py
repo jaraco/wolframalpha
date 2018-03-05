@@ -62,7 +62,7 @@ class ErrorHandler(object):
         self._handle_error()
 
     def _handle_error(self):
-        if not 'error' in self:
+        if 'error' not in self:
             return
 
         template = 'Error {error[code]}: {error[msg]}'
@@ -97,7 +97,7 @@ class Assumption(Document):
         text = self.template.replace('${desc1}', self.description)
         try:
             text = text.replace('${word}', self.word)
-        except:
+        except Exception:
             pass
         return text[:text.index('. ') + 1]
 
@@ -207,7 +207,12 @@ class Result(ErrorHandler, Document):
         """
         The pods that hold the response to a simple, discrete query.
         """
-        return (pod for pod in self.pods if pod.primary or pod.title=='Result')
+        return (
+            pod
+            for pod in self.pods
+            if pod.primary
+            or pod.title == 'Result'
+        )
 
     @property
     def details(self):

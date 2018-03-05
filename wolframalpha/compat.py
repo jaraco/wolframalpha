@@ -1,6 +1,7 @@
 import six
 from six.moves import http_client
 
+
 def fix_HTTPMessage():
 	"""
 	Python 2 uses a deprecated method signature and doesn't provide the
