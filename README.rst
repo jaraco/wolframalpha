@@ -1,10 +1,23 @@
 .. image:: https://img.shields.io/pypi/v/wolframalpha.svg
-   :target: https://pypi.org/project/wolframalpha
+   :target: `PyPI link`_
 
 .. image:: https://img.shields.io/pypi/pyversions/wolframalpha.svg
+   :target: `PyPI link`_
+
+.. _PyPI link: https://pypi.org/project/wolframalpha
+
+.. image:: https://dev.azure.com/jaraco/skeleton/_apis/build/status/jaraco.skeleton?branchName=master
+   :target: https://dev.azure.com/jaraco/skeleton/_build/latest?definitionId=1&branchName=master
 
 .. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
    :target: https://travis-ci.org/jaraco/wolframalpha
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: Black
+
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
 
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
