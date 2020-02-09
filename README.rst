@@ -6,8 +6,8 @@
 
 .. _PyPI link: https://pypi.org/project/wolframalpha
 
-.. image:: https://dev.azure.com/jaraco/skeleton/_apis/build/status/jaraco.skeleton?branchName=master
-   :target: https://dev.azure.com/jaraco/skeleton/_build/latest?definitionId=1&branchName=master
+.. image:: https://dev.azure.com/jaraco/wolframalpha/_apis/build/status/jaraco.wolframalpha?branchName=master
+   :target: https://dev.azure.com/jaraco/wolframalpha/_build/latest?definitionId=1&branchName=master
 
 .. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
    :target: https://travis-ci.org/jaraco/wolframalpha
@@ -16,8 +16,8 @@
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/wolframalpha/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/wolframalpha/branch/master
 
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
