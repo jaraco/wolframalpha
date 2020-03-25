@@ -4,7 +4,7 @@ import urllib.parse
 import urllib.request
 
 import xmltodict
-from jaraco.itertools import always_iterable
+from more_itertools import always_iterable
 
 
 class Client:
