@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-
-import six
-
 import pytest
 
 import wolframalpha
@@ -48,7 +42,7 @@ def test_properties(temp_result):
 def test_pod_attributes(temp_result):
     pod = next(temp_result.pods)
     assert isinstance(pod.position, float)
-    assert isinstance(pod.id, six.text_type)
+    assert isinstance(pod.id, str)
     img = next(next(pod.subpod).img)
     assert isinstance(img.height, int)
 

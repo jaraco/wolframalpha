@@ -1,17 +1,13 @@
 import itertools
 import json
-
-from six.moves import urllib, map
+import urllib.parse
+import urllib.request
 
 import xmltodict
 from jaraco.itertools import always_iterable
 
-from . import compat
 
-compat.fix_HTTPMessage()
-
-
-class Client(object):
+class Client:
     """
     Wolfram|Alpha v2.0 client
 
@@ -54,7 +50,7 @@ class Client(object):
         return Result(resp)
 
 
-class ErrorHandler(object):
+class ErrorHandler:
     def __init__(self, *args, **kwargs):
         super(ErrorHandler, self).__init__(*args, **kwargs)
         self._handle_error()
