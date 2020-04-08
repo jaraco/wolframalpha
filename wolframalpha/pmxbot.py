@@ -12,4 +12,4 @@ def wa(client, event, channel, nick, rest):
     """
     client = wolframalpha.Client(pmxbot.config['Wolfram|Alpha API key'])
     res = client.query(rest)
-    return next(res.results).text
+    return next(res.results).plainText
