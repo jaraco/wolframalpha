@@ -48,12 +48,12 @@ reply and some additional info)::
 
     for pod in res.pods:
         for sub in pod.subpods:
-            print(sub.text)
+            print(sub.plainText)
 
 You may also query for simply the pods which have 'Result' titles or are
 marked as 'primary' using ``Result.results``::
 
-    print(next(res.results).text)
+    print(next(res.results).plainText)
 
 All objects returned are dictionary subclasses, so to find out which attributes
 Wolfram|Alpha has supplied, simply invoke ``.keys()`` on the object.
