@@ -216,4 +216,4 @@ class Result(ErrorHandler, Document):
         """
         A simplified set of answer text by title.
         """
-        return {pod.title: pod.text for pod in self.pods}
+        return {pod.title: pod.plainText for pod in self.pods}

@@ -12,8 +12,8 @@ def test_basic(temp_result):
     res = temp_result
     assert len(list(res.pods)) > 0
     (result,) = res.results
-    assert result.text == '86 °F  (degrees Fahrenheit)'
-    assert result.texts == ['86 °F  (degrees Fahrenheit)']
+    assert result.plainText == '86 °F  (degrees Fahrenheit)'
+    assert result.plainTexts == ['86 °F  (degrees Fahrenheit)']
 
 
 def test_results_iterator(temp_result):
