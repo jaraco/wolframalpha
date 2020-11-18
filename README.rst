@@ -6,18 +6,13 @@
 
 .. _PyPI link: https://pypi.org/project/wolframalpha
 
-.. image:: https://dev.azure.com/jaraco/wolframalpha/_apis/build/status/jaraco.wolframalpha?branchName=master
-   :target: https://dev.azure.com/jaraco/wolframalpha/_build/latest?definitionId=1&branchName=master
-
-.. image:: https://img.shields.io/travis/jaraco/wolframalpha/master.svg
-   :target: https://travis-ci.org/jaraco/wolframalpha
+.. image:: https://github.com/jaraco/wolframalpha/workflows/Automated%20Tests/badge.svg
+   :target: https://github.com/jaraco/wolframalpha/actions?query=workflow%3A%22Automated+Tests%22
+   :alt: Automated Tests
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
    :alt: Code style: Black
-
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/wolframalpha/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/wolframalpha/branch/master
 
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
