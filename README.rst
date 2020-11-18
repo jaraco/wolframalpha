@@ -27,6 +27,7 @@ Basic usage is pretty simple. Create the client with your App ID (request from
 Wolfram Alpha)::
 
     import wolframalpha
+    app_id = 'ABC-123'  # get your own at https://products.wolframalpha.com/api/
     client = wolframalpha.Client(app_id)
 
 Then, you can send queries, which return Result objects::
