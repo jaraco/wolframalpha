@@ -1,6 +1,7 @@
-v4.0.1
+v4.1.0
 ======
 
+* #21: Adapt to support API change from ``.text`` to ``.plainText``.
 * Refreshed package metadata.
 
 v4.0.0
