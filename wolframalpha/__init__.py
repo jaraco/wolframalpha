@@ -2,6 +2,7 @@ import itertools
 import json
 import urllib.parse
 import urllib.request
+from typing import Dict, Callable
 
 import xmltodict
 from more_itertools import always_iterable
@@ -67,7 +68,7 @@ class ErrorHandler:
 
 
 class Document(dict):
-    _attr_types = {}
+    _attr_types: Dict[str, Callable] = {}
     "Override the types from the document"
 
     @classmethod
