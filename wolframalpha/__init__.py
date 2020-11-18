@@ -39,7 +39,10 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        data = dict(input=input, appid=self.app_id,)
+        data = dict(
+            input=input,
+            appid=self.app_id,
+        )
         data = itertools.chain(params, data.items(), kwargs.items())
 
         query = urllib.parse.urlencode(tuple(data))
@@ -105,7 +108,10 @@ class Image(Document):
     Holds information about an image included with an answer.
     """
 
-    _attr_types = dict(height=int, width=int,)
+    _attr_types = dict(
+        height=int,
+        width=int,
+    )
 
 
 class Subpod(Document):
@@ -113,7 +119,9 @@ class Subpod(Document):
     Holds a specific answer or additional information relevant to said answer.
     """
 
-    _attr_types = dict(img=Image.from_doc,)
+    _attr_types = dict(
+        img=Image.from_doc,
+    )
 
 
 def xml_bool(str_val):
@@ -131,7 +139,11 @@ class Pod(ErrorHandler, Document):
     Groups answers and information contextualizing those answers.
     """
 
-    _attr_types = dict(position=float, numsubpods=int, subpod=Subpod.from_doc,)
+    _attr_types = dict(
+        position=float,
+        numsubpods=int,
+        subpod=Subpod.from_doc,
+    )
 
     @property
     def subpods(self):
@@ -158,7 +170,9 @@ class Result(ErrorHandler, Document):
     Handles processing the response for the programmer.
     """
 
-    _attr_types = dict(pod=Pod.from_doc,)
+    _attr_types = dict(
+        pod=Pod.from_doc,
+    )
 
     def __init__(self, stream):
         doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
