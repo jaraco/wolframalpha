@@ -80,7 +80,7 @@ class Document(dict):
         >>> list(Document.from_doc({"foo": "bar"}))
         [{'foo': 'bar'}]
         """
-        return map(cls, always_iterable(doc))
+        return map(cls, always_iterable(doc, base_type=dict))
 
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
