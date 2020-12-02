@@ -76,6 +76,9 @@ class Document(dict):
         """
         Load instances from the xmltodict result. Always return
         an iterable, even if the result is a singleton.
+
+        >>> list(Document.from_doc({"foo": "bar"}))
+        [{'foo': 'bar'}]
         """
         return map(cls, always_iterable(doc))
 
