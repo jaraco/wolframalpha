@@ -77,7 +77,7 @@ class Document(dict):
         Load instances from the xmltodict result. Always return
         an iterable, even if the result is a singleton.
         """
-        return map(cls, always_iterable(doc))
+        return map(cls, always_iterable(doc, base_type=dict))
 
     def __getattr__(self, name):
         type = self._attr_types.get(name, lambda x: x)
