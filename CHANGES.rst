@@ -1,3 +1,9 @@
+v4.1.1
+======
+
+* #26: Fix error when ``always_iterable`` recognizes a dict
+  as a list of keys.
+
 v4.1.0
 ======
 
