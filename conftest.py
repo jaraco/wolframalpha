@@ -1,20 +1,11 @@
 import getpass
 import os
 
-import six
-
 import pytest
 import keyring
 from jaraco.context import suppress
 
 import wolframalpha
-
-
-if six.PY2:
-    collect_ignore = [
-        'wolframalpha/pmxbot.py',
-        'wolframalpha/test_pmxbot.py',
-    ]
 
 
 @suppress(Exception)
