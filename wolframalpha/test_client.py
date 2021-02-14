@@ -68,3 +68,10 @@ def test_from_env(monkeypatch):
     monkeypatch.delenv('WOLFRAMALPHA_API_KEY', raising=False)
     with pytest.raises(KeyError):
         wolframalpha.Client._from_env()
+
+
+class TestDocument:
+    def test_missing_attr(self):
+        doc = wolframalpha.Document()
+        with pytest.raises(AttributeError):
+            doc.missing
