@@ -261,7 +261,7 @@ class Result(ErrorHandler, Document):
         return self.info
 
     def __len__(self):
-        return sum(1 for _ in self.info)
+        return sum(1 for _ in self)
 
     def __bool__(self):
         return bool(len(self))
