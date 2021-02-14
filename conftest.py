@@ -12,5 +12,5 @@ def API_key(client):
 def client():
     try:
         return wolframalpha.Client.from_env()
-    except Exception:
+    except Exception:  # pragma: nocover
         pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")
