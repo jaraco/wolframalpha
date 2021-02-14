@@ -235,10 +235,6 @@ class Result(ErrorHandler, Document):
     Handles processing the response for the programmer.
     """
 
-    _attr_types = dict(
-        pod=Pod.from_doc,
-    )
-
     def __init__(self, stream):
         doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
         super(Result, self).__init__(doc)
@@ -252,7 +248,7 @@ class Result(ErrorHandler, Document):
 
     @property
     def pods(self):
-        return self.pod
+        return Pod.from_doc(self.get('pod'))
 
     @property
     def assumptions(self):
@@ -267,6 +263,9 @@ class Result(ErrorHandler, Document):
 
     def __len__(self):
         return sum(1 for _ in self.info)
+
+    def __bool__(self):
+        return bool(len(self))
 
     @property
     def results(self):

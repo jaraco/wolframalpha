@@ -3,6 +3,8 @@ v4.3.0
 
 * Added ``Client.from_env()`` to initialize a client loading the
   API key from the keyring or environment.
+* #13: ``Result`` objects now resolve as False and return empty
+  ``info`` and ``pods`` attributes when query was unsuccessful.
 
 v4.2.0
 ======
