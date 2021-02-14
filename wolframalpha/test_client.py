@@ -24,6 +24,10 @@ def test_results_iterator(temp_result):
     next(res.results)
 
 
+def test_result_details(temp_result):
+    assert temp_result.details
+
+
 def test_properties(temp_result):
     """
     A result should have a number of properties.
