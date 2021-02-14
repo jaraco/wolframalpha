@@ -113,7 +113,8 @@ class Client:
         resp = urllib.request.urlopen(url)
         assert resp.headers.get_content_type() == 'text/xml'
         assert resp.headers.get_param('charset') == 'utf-8'
-        return Result(resp)
+        doc = xmltodict.parse(resp)
+        return Result(doc['queryresult'])
 
 
 class ErrorHandler:
@@ -233,10 +234,6 @@ class Result(ErrorHandler, Document):
     """
     Handles processing the response for the programmer.
     """
-
-    def __init__(self, stream):
-        doc = xmltodict.parse(stream, dict_constructor=dict)['queryresult']
-        super(Result, self).__init__(doc)
 
     @property
     def info(self):
