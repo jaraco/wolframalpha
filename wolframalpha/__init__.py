@@ -4,6 +4,7 @@ import getpass
 import os
 import urllib.parse
 import urllib.request
+import contextlib
 from typing import Dict, Callable
 
 import xmltodict
@@ -157,10 +158,8 @@ class Assumption(Document):
     @property
     def text(self):
         text = self.template.replace('${desc1}', self.description)
-        try:
+        with contextlib.suppress(Exception):
             text = text.replace('${word}', self.word)
-        except Exception:
-            pass
         return text[: text.index('. ') + 1]
 
 
