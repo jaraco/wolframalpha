@@ -12,8 +12,45 @@ class Client:
     """
     Wolfram|Alpha v2.0 client
 
-    Pass an ID to the object upon instantiation, then
-    query Wolfram Alpha using the query method.
+    Basic usage is pretty simple. Get your App ID at
+    https://products.wolframalpha.com/api/.
+    Create the client with your App ID:
+
+    >>> app_id = getfixture('API_key')
+    >>> client = Client(app_id)
+
+    Send a query, which returns Results objects:
+
+    >>> res = client.query('temperature in Washington, DC on October 3, 2012')
+
+    Result objects have `pods` (a Pod is an answer group from Wolfram Alpha):
+
+    >>> for pod in res.pods:
+    ...     pass  # do_something_with(pod)
+
+    Pod objects have ``subpods`` (a Subpod is a specific response
+    with the plaintext reply and some additional info):
+
+    >>> for pod in res.pods:
+    ...     for sub in pod.subpods:
+    ...         print(sub.plaintext)
+    temperature | Washington, District of Columbia
+    Wednesday, October 3, 2012
+    (70 to 81) °F (average: 75 °F)
+    ...
+
+    To query simply for the pods that have 'Result' titles or are
+    marked as 'primary' using ``Result.results``:
+
+    >>> print(next(res.results).text)
+    (70 to 81) °F (average: 75 °F)
+    (Wednesday, October 3, 2012)
+
+    All objects returned are dictionary subclasses, so to find out which attributes
+    Wolfram|Alpha has supplied, simply invoke ``.keys()`` on the object.
+    Attributes formed from XML attributes can be accessed with or without their
+    "@" prefix (added by xmltodict).
+
     """
 
     def __init__(self, app_id):
@@ -26,16 +63,17 @@ class Client:
         Allows for arbitrary parameters to be passed in
         the query. For example, to pass assumptions:
 
-            client.query(input='pi', assumption='*C.pi-_*NamedConstant-')
+        >>> client = Client(getfixture('API_key'))
+        >>> res = client.query(input='pi', assumption='*C.pi-_*NamedConstant-')
 
         To pass multiple assumptions, pass multiple items
         as params:
 
-            params = (
-                ('assumption', '*C.pi-_*NamedConstant-'),
-                ('assumption', 'DateOrder_**Day.Month.Year--'),
-            )
-            client.query(input='pi', params=params)
+        >>> params = (
+        ...     ('assumption', '*C.pi-_*NamedConstant-'),
+        ...     ('assumption', 'DateOrder_**Day.Month.Year--'),
+        ... )
+        >>> res = client.query(input='pi', params=params)
 
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
@@ -219,4 +257,4 @@ class Result(ErrorHandler, Document):
         """
         A simplified set of answer text by title.
         """
-        return {pod.title: pod.plainText for pod in self.pods}
+        return {pod.title: pod.plaintext for pod in self.pods}

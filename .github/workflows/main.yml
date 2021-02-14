@@ -20,6 +20,8 @@ jobs:
           python -m pip install tox
       - name: Run tests
         run: tox
+        env:
+          WOLFRAMALPHA_API_KEY: ${{ secrets.WOLFRAMALPHA_API_KEY }}
 
   release:
     needs: test

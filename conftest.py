@@ -1,8 +1,11 @@
+import getpass
 import os
 
 import six
 
 import pytest
+import keyring
+from jaraco.context import suppress
 
 import wolframalpha
 
@@ -14,6 +17,11 @@ if six.PY2:
     ]
 
 
+@suppress(Exception)
+def from_keyring():
+    return keyring.get_password('https://api.wolframalpha.com/', getpass.getuser())
+
+
 @pytest.fixture(scope='session')
 def API_key():
     """
@@ -22,7 +30,7 @@ def API_key():
     skip them.
     """
     try:
-        return os.environ['WOLFRAMALPHA_API_KEY']
+        return from_keyring() or os.environ['WOLFRAMALPHA_API_KEY']
     except KeyError:
         pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")
 

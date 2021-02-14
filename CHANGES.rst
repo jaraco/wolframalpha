@@ -1,3 +1,11 @@
+v4.2.0
+======
+
+* #28: Adapt to support API change from ``.plainText`` to
+  ``.plaintext``.
+* Moved usage guide to source and published through the docs
+  and validate the usage with doctests.
+
 v4.1.1
 ======
 
