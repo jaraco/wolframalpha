@@ -1,10 +1,13 @@
 import itertools
 import json
+import getpass
+import os
 import urllib.parse
 import urllib.request
 from typing import Dict, Callable
 
 import xmltodict
+from jaraco.context import suppress
 from more_itertools import always_iterable
 
 
@@ -55,6 +58,26 @@ class Client:
 
     def __init__(self, app_id):
         self.app_id = app_id
+
+    @classmethod
+    def from_env(cls):
+        """
+        Create a client with a key discovered from the keyring
+        or environment variable. Raises an exception if no key
+        is found.
+        """
+        return cls(cls._from_keyring() or cls._from_env())
+
+    @staticmethod
+    @suppress(Exception)
+    def _from_keyring():
+        import keyring
+
+        return keyring.get_password('https://api.wolframalpha.com/', getpass.getuser())
+
+    @staticmethod
+    def _from_env():
+        return os.environ['WOLFRAMALPHA_API_KEY']
 
     def query(self, input, params=(), **kwargs):
         """

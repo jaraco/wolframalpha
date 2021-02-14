@@ -1,3 +1,9 @@
+v4.3.0
+======
+
+* Added ``Client.from_env()`` to initialize a client loading the
+  API key from the keyring or environment.
+
 v4.2.0
 ======
 
