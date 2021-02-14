@@ -1,3 +1,9 @@
+v4.3.1
+======
+
+* Fixed implementation flaw in ``Results.details``.
+* Test coverage is now 100%.
+
 v4.3.0
 ======
 
