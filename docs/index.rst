@@ -1,5 +1,5 @@
-Welcome to wolframalpha documentation!
-======================================
+Welcome to |project| documentation!
+===================================
 
 .. toctree::
    :maxdepth: 1
