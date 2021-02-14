@@ -51,3 +51,14 @@ def test_invalid_app_id():
     client = wolframalpha.Client('abcdefg')
     with pytest.raises(Exception):
         client.query('30 deg C in deg F')
+
+
+def test_unsuccessful(client):
+    """
+    A result for an unsuccessful query should be False and
+    have empty info.
+    """
+    res = client.query('this is a sentence')
+    assert not res
+    assert len(res) == 0
+    assert list(res.info) == []
