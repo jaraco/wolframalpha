@@ -62,3 +62,9 @@ def test_unsuccessful(client):
     assert not res
     assert len(res) == 0
     assert list(res.info) == []
+
+
+def test_from_env(monkeypatch):
+    monkeypatch.delenv('WOLFRAMALPHA_API_KEY', raising=False)
+    with pytest.raises(KeyError):
+        wolframalpha.Client._from_env()
