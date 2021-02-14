@@ -75,3 +75,13 @@ class TestDocument:
         doc = wolframalpha.Document()
         with pytest.raises(AttributeError):
             doc.missing
+
+
+class TestAssumption:
+    def test_text(self):
+        doc = wolframalpha.Assumption(
+            template='Assume ${desc1} and ${word}. Nothing more.',
+            description='description',
+            word='word',
+        )
+        assert doc.text == 'Assume description and word.'
