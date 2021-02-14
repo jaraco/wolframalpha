@@ -22,6 +22,13 @@ def from_keyring():
     return keyring.get_password('https://api.wolframalpha.com/', getpass.getuser())
 
 
+def from_env():
+    try:
+        return os.environ['WOLFRAMALPHA_API_KEY']
+    except KeyError:
+        pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")
+
+
 @pytest.fixture(scope='session')
 def API_key():
     """
@@ -29,10 +36,7 @@ def API_key():
     with a WOLFRAMALPHA_API_KEY environment variable. Otherwise,
     skip them.
     """
-    try:
-        return from_keyring() or os.environ['WOLFRAMALPHA_API_KEY']
-    except KeyError:
-        pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")
+    return from_keyring() or from_env()
 
 
 @pytest.fixture(scope='session')
