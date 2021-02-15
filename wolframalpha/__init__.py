@@ -153,6 +153,7 @@ class Document(dict):
         numsubpods=int,
         position=float,
         primary=xml_bool,
+        success=xml_bool,
     )
     children: Tuple[str, ...] = ()
 

@@ -10,6 +10,7 @@ def temp_result(client):
 
 def test_basic(temp_result):
     res = temp_result
+    assert temp_result.success
     assert len(list(res.pods)) > 0
     (result,) = res.results
     assert result.text == '86 °F (degrees Fahrenheit)'
@@ -63,6 +64,7 @@ def test_unsuccessful(client):
     have empty info.
     """
     res = client.query('this is a sentence')
+    assert not res.success
     assert not res
     assert len(res) == 0
     assert list(res.info) == []
