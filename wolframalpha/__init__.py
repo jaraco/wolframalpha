@@ -113,8 +113,8 @@ class Client:
         resp = urllib.request.urlopen(url)
         assert resp.headers.get_content_type() == 'text/xml'
         assert resp.headers.get_param('charset') == 'utf-8'
-        doc = xmltodict.parse(resp)
-        return Result(doc['queryresult'])
+        doc = xmltodict.parse(resp, postprocessor=Document.make)
+        return doc['queryresult']
 
 
 class ErrorHandler:
@@ -133,6 +133,31 @@ class ErrorHandler:
 class Document(dict):
     _attr_types: Dict[str, Callable] = {}
     "Override the types from the document"
+
+    @classmethod
+    def make(cls, path, key, value):
+        if key == 'queryresult':
+            value = Result(value)
+        if key == 'pod':
+            value = Pod(value)
+            key = 'pods'
+        if key == 'img':
+            value = Image(value)
+        if key == 'subpod':
+            value = Subpod(value)
+            key = 'subpods'
+        if key == 'assumption':
+            value = Assumption(value)
+            key = 'assumptions'
+        if key == 'warning':  # pragma: nocover
+            value = Warning(value)
+            key = 'warnings'
+        if key in ('@height', '@width', '@numsubpods'):
+            value = int(value)
+        if key in ('@position',):
+            value = float(value)
+
+        return key, value
 
     @classmethod
     def from_doc(cls, doc):
@@ -173,20 +198,11 @@ class Image(Document):
     Holds information about an image included with an answer.
     """
 
-    _attr_types = dict(
-        height=int,
-        width=int,
-    )
-
 
 class Subpod(Document):
     """
     Holds a specific answer or additional information relevant to said answer.
     """
-
-    _attr_types = dict(
-        img=Image.from_doc,
-    )
 
 
 def xml_bool(str_val):
@@ -204,16 +220,6 @@ class Pod(ErrorHandler, Document):
     Groups answers and information contextualizing those answers.
     """
 
-    _attr_types = dict(
-        position=float,
-        numsubpods=int,
-        subpod=Subpod.from_doc,
-    )
-
-    @property
-    def subpods(self):
-        return self.subpod
-
     @property
     def primary(self):
         return '@primary' in self and xml_bool(self['@primary'])
@@ -223,11 +229,15 @@ class Pod(ErrorHandler, Document):
         """
         The text from each subpod in this pod as a list.
         """
-        return [subpod.plaintext for subpod in self.subpod]
+        return [subpod.plaintext for subpod in self.subpods]
 
     @property
     def text(self):
-        return next(iter(self.subpod)).plaintext
+        return next(iter(self.subpods)).plaintext
+
+    @property
+    def subpods(self):
+        return always_iterable(self.get('subpods'), base_type=dict)
 
 
 class Result(ErrorHandler, Document):
@@ -244,15 +254,15 @@ class Result(ErrorHandler, Document):
 
     @property
     def pods(self):
-        return Pod.from_doc(self.get('pod'))
+        return always_iterable(self.get('pods'), base_type=dict)
 
     @property
     def assumptions(self):
-        return Assumption.from_doc(self.get('assumptions'))
+        return always_iterable(self.get('assumptions'))
 
     @property
     def warnings(self):
-        return Warning.from_doc(self.get('warnings'))
+        return always_iterable(self.get('warnings'))
 
     def __iter__(self):
         return self.info

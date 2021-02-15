@@ -47,7 +47,7 @@ def test_pod_attributes(temp_result):
     pod = next(temp_result.pods)
     assert isinstance(pod.position, float)
     assert isinstance(pod.id, str)
-    img = next(next(pod.subpod).img)
+    img = next(iter(pod.subpods)).img
     assert isinstance(img.height, int)
 
 
