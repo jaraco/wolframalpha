@@ -6,7 +6,7 @@ import urllib.parse
 import urllib.request
 import contextlib
 import collections
-from typing import Dict, Any, Callable
+from typing import Dict, Any, Callable, Tuple
 
 import xmltodict
 from jaraco.context import suppress
@@ -154,6 +154,7 @@ class Document(dict):
         position=float,
         primary=xml_bool,
     )
+    children: Tuple[str, ...] = ()
 
     @classmethod
     def _find_cls(cls, key):
@@ -168,9 +169,6 @@ class Document(dict):
     def make(cls, path, key, value):
         value = cls._find_cls(key)(value)
         value = cls._attr_types[key.lstrip('@')](value)
-        plural = 'pod', 'subpod', 'assumption', 'warning'
-        if key in plural:
-            key = key + 's'
         return key, value
 
     @classmethod
@@ -185,12 +183,25 @@ class Document(dict):
         return map(cls, always_iterable(doc, base_type=dict))
 
     def __getattr__(self, name):
+        return self._get_children(name) or self._get_attr(name)
+
+    def _get_attr(self, name):
         attr_name = '@' + name
         try:
             val = self[name] if name in self else self[attr_name]
         except KeyError:
             raise AttributeError(name)
         return val
+
+    def _get_children(self, name):
+        if name not in self.__class__.children:
+            return
+        singular = name.rstrip('s')
+        try:
+            val = self._get_attr(singular)
+        except AttributeError:
+            val = None
+        return always_iterable(val, base_type=dict)
 
 
 class Assumption(Document):
@@ -225,6 +236,8 @@ class Pod(ErrorHandler, Document):
     Groups answers and information contextualizing those answers.
     """
 
+    children = ('subpods',)
+
     @property
     def primary(self):
         return self.get('@primary', False)
@@ -240,10 +253,6 @@ class Pod(ErrorHandler, Document):
     def text(self):
         return next(iter(self.subpods)).plaintext
 
-    @property
-    def subpods(self):
-        return always_iterable(self.get('subpods'), base_type=dict)
-
 
 class Result(ErrorHandler, Document):
     """
@@ -251,6 +260,7 @@ class Result(ErrorHandler, Document):
     """
 
     key = 'queryresult'
+    children = 'pods', 'assumptions', 'warnings'
 
     @property
     def info(self):
@@ -258,18 +268,6 @@ class Result(ErrorHandler, Document):
         The pods, assumptions, and warnings of this result.
         """
         return itertools.chain(self.pods, self.assumptions, self.warnings)
-
-    @property
-    def pods(self):
-        return always_iterable(self.get('pods'), base_type=dict)
-
-    @property
-    def assumptions(self):
-        return always_iterable(self.get('assumptions'))
-
-    @property
-    def warnings(self):
-        return always_iterable(self.get('warnings'))
 
     def __iter__(self):
         return self.info
