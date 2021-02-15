@@ -1,3 +1,15 @@
+v5.0.0
+======
+
+* Rewrote object model to load objects more automatically.
+  API is mostly compatible, but there may be some rare
+  uses that may need some adjustment. In particular,
+  access to 'children' properties ('pods', 'subpods',
+  'assumptions', 'warnings') are exposed as loaded through
+  their singular names (without transforms or defaults) but
+  exposed as iterable (empty by default) through the plural
+  names.
+
 v4.3.1
 ======
 
