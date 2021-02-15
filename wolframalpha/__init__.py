@@ -13,6 +13,16 @@ from jaraco.context import suppress
 from more_itertools import always_iterable
 
 
+def xml_bool(str_val):
+    """
+    >>> xml_bool('true')
+    True
+    >>> xml_bool('false')
+    False
+    """
+    return bool(json.loads(str_val))
+
+
 class Client:
     """
     Wolfram|Alpha v2.0 client
@@ -142,6 +152,7 @@ class Document(dict):
         width=int,
         numsubpods=int,
         position=float,
+        primary=xml_bool,
     )
 
     @classmethod
@@ -209,16 +220,6 @@ class Subpod(Document):
     """
 
 
-def xml_bool(str_val):
-    """
-    >>> xml_bool('true')
-    True
-    >>> xml_bool('false')
-    False
-    """
-    return bool(json.loads(str_val))
-
-
 class Pod(ErrorHandler, Document):
     """
     Groups answers and information contextualizing those answers.
@@ -226,7 +227,7 @@ class Pod(ErrorHandler, Document):
 
     @property
     def primary(self):
-        return '@primary' in self and xml_bool(self['@primary'])
+        return self.get('@primary', False)
 
     @property
     def texts(self):
