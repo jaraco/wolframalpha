@@ -159,6 +159,9 @@ class Document(dict):
 
     @classmethod
     def _find_cls(cls, key):
+        """
+        Find a possible class for wrapping an item by key.
+        """
         matching = (
             sub
             for sub in cls.__subclasses__()
