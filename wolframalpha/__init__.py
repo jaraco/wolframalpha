@@ -5,7 +5,8 @@ import os
 import urllib.parse
 import urllib.request
 import contextlib
-from typing import Dict, Callable
+import collections
+from typing import Dict, Any, Callable
 
 import xmltodict
 from jaraco.context import suppress
@@ -130,33 +131,35 @@ class ErrorHandler:
         raise Exception(template.format(**self))
 
 
+def identity(x):
+    return x
+
+
 class Document(dict):
-    _attr_types: Dict[str, Callable] = {}
-    "Override the types from the document"
+    _attr_types: Dict[str, Callable[[str], Any]] = collections.defaultdict(
+        lambda: identity,
+        height=int,
+        width=int,
+        numsubpods=int,
+        position=float,
+    )
+
+    @classmethod
+    def _find_cls(cls, key):
+        matching = (
+            sub
+            for sub in cls.__subclasses__()
+            if key == getattr(sub, 'key', sub.__name__.lower())
+        )
+        return next(matching, identity)
 
     @classmethod
     def make(cls, path, key, value):
-        if key == 'queryresult':
-            value = Result(value)
-        if key == 'pod':
-            value = Pod(value)
-            key = 'pods'
-        if key == 'img':
-            value = Image(value)
-        if key == 'subpod':
-            value = Subpod(value)
-            key = 'subpods'
-        if key == 'assumption':
-            value = Assumption(value)
-            key = 'assumptions'
-        if key == 'warning':  # pragma: nocover
-            value = Warning(value)
-            key = 'warnings'
-        if key in ('@height', '@width', '@numsubpods'):
-            value = int(value)
-        if key in ('@position',):
-            value = float(value)
-
+        value = cls._find_cls(key)(value)
+        value = cls._attr_types[key.lstrip('@')](value)
+        plural = 'pod', 'subpod', 'assumption', 'warning'
+        if key in plural:
+            key = key + 's'
         return key, value
 
     @classmethod
@@ -171,13 +174,12 @@ class Document(dict):
         return map(cls, always_iterable(doc, base_type=dict))
 
     def __getattr__(self, name):
-        type = self._attr_types.get(name, lambda x: x)
         attr_name = '@' + name
         try:
             val = self[name] if name in self else self[attr_name]
         except KeyError:
             raise AttributeError(name)
-        return type(val)
+        return val
 
 
 class Assumption(Document):
@@ -197,6 +199,8 @@ class Image(Document):
     """
     Holds information about an image included with an answer.
     """
+
+    key = 'img'
 
 
 class Subpod(Document):
@@ -244,6 +248,8 @@ class Result(ErrorHandler, Document):
     """
     Handles processing the response for the programmer.
     """
+
+    key = 'queryresult'
 
     @property
     def info(self):
