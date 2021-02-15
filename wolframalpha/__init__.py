@@ -171,17 +171,6 @@ class Document(dict):
         value = cls._attr_types[key.lstrip('@')](value)
         return key, value
 
-    @classmethod
-    def from_doc(cls, doc):
-        """
-        Load instances from the xmltodict result. Always return
-        an iterable, even if the result is a singleton.
-
-        >>> list(Document.from_doc({"foo": "bar"}))
-        [{'foo': 'bar'}]
-        """
-        return map(cls, always_iterable(doc, base_type=dict))
-
     def __getattr__(self, name):
         return self._get_children(name) or self._get_attr(name)
 
