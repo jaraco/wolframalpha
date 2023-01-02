@@ -14,7 +14,7 @@
 .. image:: https://readthedocs.org/projects/wolframalpha/badge/?version=latest
    :target: https://wolframalpha.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/badge/skeleton-2022-informational
+.. image:: https://img.shields.io/badge/skeleton-2023-informational
    :target: https://blog.jaraco.com/skeleton
 
 Python Client built against the `Wolfram|Alpha <http://wolframalpha.com>`_
