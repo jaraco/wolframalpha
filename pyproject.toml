@@ -1,5 +1,60 @@
 [build-system]
-requires = ["setuptools>=56", "setuptools_scm[toml]>=3.4.1"]
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=3.4.1"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "wolframalpha"
+authors = [
+	{ name = "Jason R. Coombs", email = "jaraco@jaraco.com" },
+]
+description = "Wolfram|Alpha 2.0 API client"
+readme = "README.rst"
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"License :: OSI Approved :: MIT License",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3 :: Only",
+]
+requires-python = ">=3.8"
+dependencies = [
+	"xmltodict",
+	"more_itertools",
+	"jaraco.context",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/jaraco/wolframalpha"
+
+[project.optional-dependencies]
+testing = [
+	# upstream
+	"pytest >= 6",
+	"pytest-checkdocs >= 2.4",
+	"pytest-cov",
+	'pytest-mypy; python_implementation != "PyPy"', # workaround for jaraco/skeleton#22
+	"pytest-enabler >= 2.2",
+	"pytest-ruff >= 0.2.1",
+
+	# local
+	"pmxbot",
+	"keyring",
+]
+docs = [
+	# upstream
+	"sphinx >= 3.5",
+	# workaround for sphinx/sphinx-doc#11662
+	"sphinx < 7.2.5",
+	"jaraco.packaging >= 9.3",
+	"rst.linker >= 1.9",
+	"furo",
+	"sphinx-lint",
+
+	# local
+]
+
+[project.entry-points]
+pmxbot_handlers = {"Wolfram|Alpha" = "wolframalpha.pmxbot"}
 
 [tool.setuptools_scm]
