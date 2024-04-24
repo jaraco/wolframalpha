@@ -30,10 +30,10 @@ Homepage = "https://github.com/jaraco/wolframalpha"
 [project.optional-dependencies]
 testing = [
 	# upstream
-	"pytest >= 6",
+	"pytest >= 6, != 8.1.*",
 	"pytest-checkdocs >= 2.4",
 	"pytest-cov",
-	'pytest-mypy; python_implementation != "PyPy"', # workaround for jaraco/skeleton#22
+	"pytest-mypy",
 	"pytest-enabler >= 2.2",
 	"pytest-ruff >= 0.2.1",
 
@@ -44,8 +44,6 @@ testing = [
 docs = [
 	# upstream
 	"sphinx >= 3.5",
-	# workaround for sphinx/sphinx-doc#11662
-	"sphinx < 7.2.5",
 	"jaraco.packaging >= 9.3",
 	"rst.linker >= 1.9",
 	"furo",
