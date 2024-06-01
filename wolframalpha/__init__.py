@@ -118,14 +118,9 @@ class Client:
         return asyncio.run(self.aquery(input, **kwargs))
 
     async def aquery(self, input, **kwargs):
+        params = dict(appid=self.app_id, input=input) | kwargs
         async with httpx.AsyncClient() as client:
-            resp = await client.get(self.url, params=self.__params(input, **kwargs))
-        return self.__process(resp)
-
-    def __params(self, input, **kwargs):
-        return dict(appid=self.app_id, input=input) | kwargs
-
-    def __process(self, resp):
+            resp = await client.get(self.url, params=params)
         assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
         doc = xmltodict.parse(resp.content, postprocessor=Document.make)
         return doc['queryresult']
