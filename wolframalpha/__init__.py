@@ -1,3 +1,4 @@
+import asyncio
 import itertools
 import json
 import getpass
@@ -114,8 +115,8 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        resp = httpx.get(self.url, params=self.__params(input, **kwargs))
-        return self.__process(resp)
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(self.aquery(input, **kwargs))
 
     async def aquery(self, input, **kwargs):
         async with httpx.AsyncClient() as client:
