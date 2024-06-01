@@ -87,7 +87,7 @@ class TestDocument:
     def test_missing_attr(self):
         doc = wolframalpha.Document()
         with pytest.raises(AttributeError):
-            doc.missing
+            _ = doc.missing
 
 
 class TestAssumption:
