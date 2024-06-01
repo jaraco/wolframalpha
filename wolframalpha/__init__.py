@@ -189,12 +189,14 @@ class Document(dict):
     def _get_children(self, name):
         if name not in self.__class__.children:
             return
+
+        # some objects, like Assumptions and Warnings
+        # are found in a container with the plural name;
+        # others like Pods and Subpods appear directly in
+        # the parent (self).
+        container = self.get(name, self)
         singular = name.rstrip('s')
-        try:
-            val = self._get_attr(singular)
-        except AttributeError:
-            val = None
-        return always_iterable(val, base_type=dict)
+        return always_iterable(container.get(singular), base_type=dict)
 
 
 class Assumption(Document):

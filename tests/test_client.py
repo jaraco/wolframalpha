@@ -44,6 +44,13 @@ def test_properties(temp_result):
     assert len(info) == len(pods) + len(warnings) + len(assumptions)
 
 
+def test_assumptions(client):
+    res = client.query('pi')
+    (assumption,) = res.assumptions
+    assert assumption.word == 'pi'
+    assert assumption.type == 'Clash'
+
+
 def test_pod_attributes(temp_result):
     pod = next(temp_result.pods)
     assert isinstance(pod.position, float)
