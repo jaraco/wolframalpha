@@ -1,3 +1,12 @@
+v5.1.2
+======
+
+Bugfixes
+--------
+
+- Restore support for query params.
+
+
 v5.1.1
 ======
 
