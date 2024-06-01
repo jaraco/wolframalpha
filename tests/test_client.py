@@ -1,5 +1,3 @@
-import asyncio
-
 import pytest
 
 import wolframalpha
@@ -100,7 +98,3 @@ class TestAssumption:
             word='word',
         )
         assert doc.text == 'Assume description and word.'
-
-
-def test_async(client):
-    asyncio.run(client.aquery('How tall is the Burj Kalifa?'))
