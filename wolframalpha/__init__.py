@@ -133,7 +133,7 @@ class Client:
 
 class ErrorHandler:
     def __init__(self, *args, **kwargs):
-        super(ErrorHandler, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._handle_error()
 
     def _handle_error(self):
