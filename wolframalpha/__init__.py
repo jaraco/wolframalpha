@@ -184,8 +184,8 @@ class Document(dict):
         attr_name = '@' + name
         try:
             val = self[name] if name in self else self[attr_name]
-        except KeyError:
-            raise AttributeError(name)
+        except KeyError as err:
+            raise AttributeError(name) from err
         return val
 
     def _get_children(self, name):
