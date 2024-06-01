@@ -61,7 +61,7 @@ def test_pod_attributes(temp_result):
 
 def test_invalid_app_id():
     client = wolframalpha.Client('abcdefg')
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError, match="Error 1: Invalid appid"):
         client.query('30 deg C in deg F')
 
 

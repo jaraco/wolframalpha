@@ -140,8 +140,7 @@ class ErrorHandler:
         if 'error' not in self:
             return
 
-        template = 'Error {error[code]}: {error[msg]}'
-        raise Exception(template.format(**self))
+        raise ValueError('Error {error[code]}: {error[msg]}'.format_map(self))
 
 
 def identity(x):
