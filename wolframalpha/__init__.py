@@ -67,6 +67,8 @@ class Client:
 
     """
 
+    url = 'https://api.wolframalpha.com/v2/query'
+
     def __init__(self, app_id):
         self.app_id = app_id
 
@@ -112,13 +114,17 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        data = dict(
-            input=input,
-            appid=self.app_id,
-        )
+        resp = httpx.get(self.url, params=self.__params(input, **kwargs))
+        return self.__process(resp)
 
-        url = 'https://api.wolframalpha.com/v2/query'
-        resp = httpx.get(url, params=data | kwargs)
+    async def aquery(self, input, **kwargs):
+        resp = await httpx.aget(self.url, params=self.__params(input, **kwargs))
+        return self.__process(resp)
+
+    def __params(self, input, **kwargs):
+        return dict(appid=self.app_id, input=input) | kwargs
+
+    def __process(self, resp):
         assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
         doc = xmltodict.parse(resp.content, postprocessor=Document.make)
         return doc['queryresult']
