@@ -1,3 +1,12 @@
+v5.0.1
+======
+
+Bugfixes
+--------
+
+- Now correctly resolve Warnings and Assumptions. (#29)
+
+
 v5.0.0
 ======
 
