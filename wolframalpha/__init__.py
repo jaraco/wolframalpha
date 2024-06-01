@@ -118,7 +118,8 @@ class Client:
         return self.__process(resp)
 
     async def aquery(self, input, **kwargs):
-        resp = await httpx.aget(self.url, params=self.__params(input, **kwargs))
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(self.url, params=self.__params(input, **kwargs))
         return self.__process(resp)
 
     def __params(self, input, **kwargs):
