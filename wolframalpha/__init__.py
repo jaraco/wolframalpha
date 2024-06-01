@@ -1,11 +1,11 @@
 import asyncio
+import collections
+import contextlib
+import getpass
 import itertools
 import json
-import getpass
 import os
-import contextlib
-import collections
-from typing import Dict, Any, Callable, Tuple
+from typing import Any, Callable, Dict, Tuple
 
 import httpx
 import multidict
