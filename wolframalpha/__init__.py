@@ -2,12 +2,11 @@ import itertools
 import json
 import getpass
 import os
-import urllib.parse
-import urllib.request
 import contextlib
 import collections
 from typing import Dict, Any, Callable, Tuple
 
+import httpx
 import xmltodict
 from jaraco.context import suppress
 from more_itertools import always_iterable
@@ -117,14 +116,11 @@ class Client:
             input=input,
             appid=self.app_id,
         )
-        data = itertools.chain(params, data.items(), kwargs.items())
 
-        query = urllib.parse.urlencode(tuple(data))
-        url = 'https://api.wolframalpha.com/v2/query?' + query
-        resp = urllib.request.urlopen(url)
-        assert resp.headers.get_content_type() == 'text/xml'
-        assert resp.headers.get_param('charset') == 'utf-8'
-        doc = xmltodict.parse(resp, postprocessor=Document.make)
+        url = 'https://api.wolframalpha.com/v2/query'
+        resp = httpx.get(url, params=data | kwargs)
+        assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
+        doc = xmltodict.parse(resp.content, postprocessor=Document.make)
         return doc['queryresult']
 
 
