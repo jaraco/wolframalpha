@@ -1,3 +1,12 @@
+v5.1.0
+======
+
+Features
+--------
+
+- Implement async support via client.aquery. (#30)
+
+
 v5.0.1
 ======
 

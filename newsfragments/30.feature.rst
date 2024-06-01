@@ -1,1 +1,0 @@
-Implement async support via client.aquery.
