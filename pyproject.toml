@@ -22,6 +22,7 @@ dependencies = [
 	"more_itertools",
 	"jaraco.context",
 	"httpx",
+	"multidict",
 ]
 dynamic = ["version"]
 

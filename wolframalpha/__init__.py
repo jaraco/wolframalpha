@@ -8,6 +8,7 @@ import collections
 from typing import Dict, Any, Callable, Tuple
 
 import httpx
+import multidict
 import xmltodict
 from jaraco.context import suppress
 from more_itertools import always_iterable
@@ -115,12 +116,16 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        return asyncio.run(self.aquery(input, **kwargs))
+        return asyncio.run(self.aquery(input, params, **kwargs))
 
-    async def aquery(self, input, **kwargs):
-        params = dict(appid=self.app_id, input=input) | kwargs
+    async def aquery(self, input, params=(), **kwargs):
         async with httpx.AsyncClient() as client:
-            resp = await client.get(self.url, params=params)
+            resp = await client.get(
+                self.url,
+                params=multidict.MultiDict(
+                    params, appid=self.app_id, input=input, **kwargs
+                ),
+            )
         assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
         doc = xmltodict.parse(resp.content, postprocessor=Document.make)
         return doc['queryresult']
