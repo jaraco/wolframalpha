@@ -103,5 +103,4 @@ class TestAssumption:
 
 
 def test_async(client):
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(client.aquery('How tall is the Burj Kalifa?'))
+    asyncio.run(client.aquery('How tall is the Burj Kalifa?'))

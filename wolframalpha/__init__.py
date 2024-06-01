@@ -115,8 +115,7 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(self.aquery(input, **kwargs))
+        return asyncio.run(self.aquery(input, **kwargs))
 
     async def aquery(self, input, **kwargs):
         async with httpx.AsyncClient() as client:
