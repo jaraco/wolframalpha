@@ -1,1 +1,0 @@
-Add test for async functionality and fixed issue with implementation.

@@ -1,3 +1,12 @@
+v5.1.1
+======
+
+Bugfixes
+--------
+
+- Add test for async functionality and fixed issue with implementation.
+
+
 v5.1.0
 ======
 
