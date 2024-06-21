@@ -27,7 +27,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/jaraco/wolframalpha"
+Source = "https://github.com/jaraco/wolframalpha"
 
 [project.optional-dependencies]
 test = [
