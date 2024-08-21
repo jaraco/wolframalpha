@@ -65,6 +65,9 @@ enabler = [
 
 type = [
 	"pytest-mypy",
+
+	# local
+	"types-xmltodict",
 ]
 
 
