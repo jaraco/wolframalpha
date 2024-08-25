@@ -75,4 +75,9 @@ type = [
 [project.entry-points]
 pmxbot_handlers = {"Wolfram|Alpha" = "wolframalpha.pmxbot"}
 
+
 [tool.setuptools_scm]
+
+
+[tool.pytest-enabler.mypy]
+# Disabled due to jaraco/skeleton#143
