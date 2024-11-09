@@ -116,7 +116,19 @@ class Client:
         For more details on Assumptions, see
         https://products.wolframalpha.com/api/documentation.html#6
         """
-        return asyncio.run(self.aquery(input, params, **kwargs))
+        return self._query(input, params, **kwargs)
+
+    def _query(self, input, params=(), **kwargs):
+        with httpx.Client() as client:
+            resp = client.get(
+                self.url,
+                params=multidict.MultiDict(
+                    params, appid=self.app_id, input=input, **kwargs
+                ),
+            )
+        assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
+        doc = xmltodict.parse(resp.content, postprocessor=Document.make)
+        return doc['queryresult']
 
     async def aquery(self, input, params=(), **kwargs):
         async with httpx.AsyncClient() as client:
