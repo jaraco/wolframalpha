@@ -126,7 +126,9 @@ class Client:
                     params, appid=self.app_id, input=input, **kwargs
                 ),
             )
-        assert resp.headers['Content-Type'] == 'text/xml;charset=utf-8'
+        content_type = resp.headers.get('Content-Type', '').lower()
+        assert 'text/xml' in content_type or 'application/xml' in content_type
+        assert 'charset=utf-8' in content_type
         doc = xmltodict.parse(resp.content, postprocessor=Document.make)
         return doc['queryresult']
 
