@@ -39,6 +39,11 @@ ignore = [
 	# B008 is over-reaching; see jaraco/skeleton#214
 	"B008", # function-call-in-default-argument
 
+	# PLC0414 flags `import X as X`, the idiom type checkers recognize as an
+	# explicit re-export, and its fix (with F401) silently drops public names.
+	# See jaraco/skeleton#210.
+	"PLC0414", # useless-import-alias
+
 	# local
 ]
 
