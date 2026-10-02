@@ -1,1 +1,0 @@
-Fixed ``AssertionError`` on every query, caused by the API now sending a space after the semicolon in the ``Content-Type`` header (``text/xml; charset=utf-8``).
