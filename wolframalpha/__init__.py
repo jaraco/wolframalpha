@@ -5,7 +5,8 @@ import getpass
 import itertools
 import json
 import os
-from typing import Any, Callable, Dict, Tuple
+from collections.abc import Callable
+from typing import Any, Dict, Tuple
 
 import httpx
 import multidict
@@ -148,7 +149,7 @@ def identity(x):
 
 
 class Document(dict):
-    _attr_types: Dict[str, Callable[[str], Any]] = collections.defaultdict(
+    _attr_types: dict[str, Callable[[str], Any]] = collections.defaultdict(
         lambda: identity,
         height=int,
         width=int,
@@ -157,7 +158,7 @@ class Document(dict):
         primary=xml_bool,
         success=xml_bool,
     )
-    children: Tuple[str, ...] = ()
+    children: tuple[str, ...] = ()
 
     @classmethod
     def _find_cls(cls, key):
