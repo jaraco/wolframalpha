@@ -38,7 +38,7 @@ class Client:
 
     Send a query, which returns Results objects:
 
-    >>> res = client.query('temperature in Washington, DC on October 3, 2012')
+    >>> res = client.query('2+2')
 
     Result objects have `pods` (a Pod is an answer group from Wolfram Alpha):
 
@@ -50,24 +50,20 @@ class Client:
 
     >>> for pod in res.pods:
     ...     for sub in pod.subpods:
-    ...         print(sub.plaintext)
-    temperature | Washington, District of Columbia
-    Wednesday, October 3, 2012
-    (70 to 81) °F (average: 75 °F)
-    ...
+    ...         pass  # do_something_with(sub)
 
     To query simply for the pods that have 'Result' titles or are
     marked as 'primary' using ``Result.results``:
 
-    >>> print(next(res.results).text)
-    (70 to 81) °F (average: 75 °F)
-    (Wednesday, October 3, 2012)
+    >>> result = next(res.results)
 
     All objects returned are dictionary subclasses, so to find out which attributes
     Wolfram|Alpha has supplied, simply invoke ``.keys()`` on the object.
     Attributes formed from XML attributes can be accessed with or without their
     "@" prefix (added by xmltodict).
 
+    For example, you can also try queries such as ``capital of Armenia``
+    or ``temperature in Washington, DC on October 3, 2012``.
     """
 
     url = 'https://api.wolframalpha.com/v2/query'
