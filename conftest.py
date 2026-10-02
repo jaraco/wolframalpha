@@ -1,3 +1,5 @@
+import contextlib
+
 import pytest
 
 import wolframalpha
@@ -10,7 +12,7 @@ def API_key(client):
 
 @pytest.fixture(scope='session')
 def client():
-    try:
+    with contextlib.suppress(Exception):
         return wolframalpha.Client.from_env()
-    except Exception:  # pragma: nocover
-        pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")
+
+    pytest.skip("Need WOLFRAMALPHA_API_KEY in environment")  # pragma: nocover
