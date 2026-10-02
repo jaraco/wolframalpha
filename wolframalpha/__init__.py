@@ -38,7 +38,16 @@ class Client:
 
     Send a query, which returns Results objects:
 
-    >>> res = client.query('2+2')
+    >>> res = client.query(
+    ...     'temperature in Washington, DC on October 3, 2012',
+    ...     location='earth',
+    ...     units='metric',
+    ... )
+
+    Wolfram|Alpha tailors results (units, how places are named) to the
+    caller's location, inferred from their IP address unless supplied.
+    Passing ``location`` (or ``latlong`` or ``ip``) and ``units`` makes
+    results independent of where the query originates.
 
     Result objects have `pods` (a Pod is an answer group from Wolfram Alpha):
 
@@ -50,20 +59,24 @@ class Client:
 
     >>> for pod in res.pods:
     ...     for sub in pod.subpods:
-    ...         pass  # do_something_with(sub)
+    ...         print(sub.plaintext)
+    temperature | Washington, United States
+    Wednesday, October 3, 2012
+    (21 to 27) °C (average: 24 °C)
+    ...
 
     To query simply for the pods that have 'Result' titles or are
     marked as 'primary' using ``Result.results``:
 
-    >>> result = next(res.results)
+    >>> print(next(res.results).text)
+    (21 to 27) °C (average: 24 °C)
+    (Wednesday, October 3, 2012)
 
     All objects returned are dictionary subclasses, so to find out which attributes
     Wolfram|Alpha has supplied, simply invoke ``.keys()`` on the object.
     Attributes formed from XML attributes can be accessed with or without their
     "@" prefix (added by xmltodict).
 
-    For example, you can also try queries such as ``capital of Armenia``
-    or ``temperature in Washington, DC on October 3, 2012``.
     """
 
     url = 'https://api.wolframalpha.com/v2/query'
