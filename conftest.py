@@ -1,8 +1,15 @@
 import contextlib
+import importlib.util
 
 import pytest
 
 import wolframalpha
+
+collect_ignore = (
+    []
+    if importlib.util.find_spec('pmxbot')
+    else ['wolframalpha/pmxbot.py', 'tests/test_pmxbot.py']
+)
 
 
 @pytest.fixture(scope='session')

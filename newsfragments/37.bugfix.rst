@@ -1,0 +1,1 @@
+Excluded pmxbot from the test dependencies on Windows, where it cannot be installed on free-threaded Python.

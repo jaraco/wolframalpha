@@ -40,7 +40,8 @@ test = [
 	"pytest >= 6, != 8.1.*",
 
 	# local
-	"pmxbot",
+	# pmxbot is uninstallable on free-threaded Python on Windows (#37)
+	"pmxbot; sys_platform != 'win32'",
 	"keyring",
 ]
 
