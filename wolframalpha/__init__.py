@@ -6,7 +6,7 @@ import itertools
 import json
 import os
 from collections.abc import Callable
-from typing import Any, Dict, Tuple
+from typing import Any, ClassVar
 
 import httpx
 import multidict
@@ -149,7 +149,7 @@ def identity(x):
 
 
 class Document(dict):
-    _attr_types: dict[str, Callable[[str], Any]] = collections.defaultdict(
+    _attr_types: ClassVar[dict[str, Callable[[str], Any]]] = collections.defaultdict(
         lambda: identity,
         height=int,
         width=int,
