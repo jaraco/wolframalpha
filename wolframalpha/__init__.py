@@ -129,6 +129,9 @@ class Client:
             )
         assert resp.headers['Content-Type'] == 'text/xml; charset=utf-8'
         doc = xmltodict.parse(resp.content, postprocessor=Document.make)
+        if 'error' in doc:
+            error = doc['error']
+            raise ValueError(f"Error {error['@status']}: {error['@message']}")
         return doc['queryresult']
 
 
