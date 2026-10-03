@@ -1,3 +1,21 @@
+v5.1.4
+======
+
+Bugfixes
+--------
+
+- Fixed ``AssertionError`` on every query, caused by the API now sending a space after the semicolon in the ``Content-Type`` header (``text/xml; charset=utf-8``). (#35)
+- Excluded pmxbot from the test dependencies on Windows, where it cannot be installed on free-threaded Python. (#37)
+- Increased the default request timeout to 30 seconds (from httpx's default of 5) and made it configurable via Client(app_id, timeout=...). (#38)
+- Raise ValueError for the top-level ``<error>`` document the API now returns for an invalid appid (HTTP 401).
+
+
+Improved Documentation
+----------------------
+
+- Made the ``Client`` doctest independent of the caller's location by passing an explicit ``location`` and ``units``. (#39)
+
+
 v5.1.3
 ======
 
