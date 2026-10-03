@@ -1,0 +1,1 @@
+Made the ``Client`` doctest independent of the caller's location by passing an explicit ``location`` and ``units``.
