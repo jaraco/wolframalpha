@@ -81,8 +81,17 @@ class Client:
 
     url = 'https://api.wolframalpha.com/v2/query'
 
-    def __init__(self, app_id):
+    timeout: float = 30.0
+    """
+    Seconds to wait for the API to respond. Wolfram|Alpha's own
+    ``totaltimeout`` defaults to about 20 seconds, so allow somewhat more
+    than that (rather than httpx's default of 5 seconds).
+    Pass ``timeout=`` to the constructor to override.
+    """
+
+    def __init__(self, app_id, **kwargs):
         self.app_id = app_id
+        vars(self).update(kwargs)
 
     @classmethod
     def from_env(cls):
@@ -129,7 +138,7 @@ class Client:
         return asyncio.run(self.aquery(input, params, **kwargs))
 
     async def aquery(self, input, params=(), **kwargs):
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
             resp = await client.get(
                 self.url,
                 params=multidict.MultiDict(
