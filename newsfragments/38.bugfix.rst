@@ -1,0 +1,1 @@
+Increased the default request timeout to 30 seconds (from httpx's default of 5) and made it configurable via Client(app_id, timeout=...).
