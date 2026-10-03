@@ -1,4 +1,0 @@
-# local development
-.venv/
-__pycache__/
-*.egg-info/
